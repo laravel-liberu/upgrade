@@ -1,0 +1,30 @@
+{
+    "name": "laravel-enso/upgrade",
+    "description": "Helper classes dependency for Laravel Enso",
+    "keywords": [
+        "laravel-enso",
+        "upgrade"
+    ],
+    "homepage": "https://github.com/laravel-enso/upgrade",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adrian Ocneanu",
+            "email": "aocneanu@gmail.com",
+            "homepage": "https://laravel-enso.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.4.0",
+        "laravel/framework": "^7.0",
+        "laravel-enso/permissions": "3.4.*",
+        "laravel-enso/roles": "3.4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaravelEnso\\Upgrade\\": "src/"
+        }
+    }
+}
