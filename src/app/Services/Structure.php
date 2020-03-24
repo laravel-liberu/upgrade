@@ -41,7 +41,9 @@ class Structure implements Upgrade, MigratesData
             ->each(fn ($permission) => $this->permission($permission));
 
         if (App::isLocal()) {
-            $this->upgradeRoles->each->writeConfig();
+            $this->upgradeRoles
+                ->filter(fn ($role) => $role->name !== Config::get('enso.config.defaultRole'))
+                ->each->writeConfig();
         }
     }
 

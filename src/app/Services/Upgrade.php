@@ -5,6 +5,7 @@ namespace LaravelEnso\Upgrade\App\Services;
 use Illuminate\Support\Collection;
 use LaravelEnso\Upgrade\App\Contracts\MigratesStructure;
 use LaravelEnso\Upgrade\App\Contracts\Upgrade as Contract;
+use LaravelEnso\Upgrade\App\Exceptions\MissingInterface;
 
 class Upgrade
 {
@@ -20,15 +21,21 @@ class Upgrade
         $this->upgrades->each(fn ($upgrade) => $this->run(new $upgrade));
     }
 
-    private function run(Contract $upgrade)
+    private function run($upgrade)
     {
         (new Database($this->upgrade($upgrade)))->handle();
     }
 
-    private function upgrade(Contract $upgrade)
+    private function upgrade($upgrade)
     {
-        return $upgrade instanceof MigratesStructure
-            ? new Structure($upgrade)
-            : $upgrade;
+        if ($upgrade instanceof MigratesStructure) {
+            return new Structure($upgrade);
+        }
+
+        if ($upgrade instanceof Contract) {
+            return $upgrade;
+        }
+
+        throw new MissingInterface();
     }
 }
