@@ -77,10 +77,12 @@ class Structure implements Upgrade, MigratesData
 
     private function upgradeRoles()
     {
+        $defaultRole = Config::get('enso.config.defaultRole');
+
         if (! isset($this->upgradeRoles)) {
             $roles = $this->upgrade->roles()->isNotEmpty()
-                ? $this->upgrade->roles()
-                : [Config::get('enso.config.defaultRole')];
+                ? $this->upgrade->roles()->push($defaultRole)->unique()
+                : [$defaultRole];
 
             $this->upgradeRoles = Role::whereIn('name', $roles)->get();
         }
