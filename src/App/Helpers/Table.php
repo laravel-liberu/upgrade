@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelEnso\Upgrade\App\Services;
+namespace LaravelEnso\Upgrade\App\Helpers;
 
 use Illuminate\Support\Facades\Schema;
 

@@ -7,7 +7,7 @@ use LaravelEnso\Upgrade\App\Contracts\MigratesData;
 use LaravelEnso\Upgrade\App\Contracts\MigratesPostDataMigration;
 use LaravelEnso\Upgrade\App\Contracts\MigratesTable;
 use LaravelEnso\Upgrade\App\Contracts\RollbackTableMigration;
-use LaravelEnso\Upgrade\App\Services\Table;
+use LaravelEnso\Upgrade\App\Helpers\Table;
 use LaravelEnso\Upgrade\App\Services\Upgrade as Service;
 use Tests\TestCase;
 
