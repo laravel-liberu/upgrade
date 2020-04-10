@@ -6,8 +6,8 @@ use Exception;
 
 class InvalidOperation extends Exception
 {
-    public function rollback()
+    public static function rollback()
     {
-        return new self('Missing rollback scenario');
+        return new static('Missing rollback scenario');
     }
 }
