@@ -2,7 +2,7 @@
 
 namespace LaravelEnso\Upgrade\App\Services;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use LaravelEnso\Permissions\App\Models\Permission;
@@ -17,7 +17,6 @@ class Structure implements Upgrade, MigratesData
     private Collection $existing;
     private Collection $allRoles;
     private Collection $upgradeRoles;
-    private string $defaultRole;
 
     public function __construct(MigratesStructure $upgrade)
     {
@@ -35,15 +34,16 @@ class Structure implements Upgrade, MigratesData
 
     public function migrateData(): void
     {
-        $this->defaultRole = Config::get('enso.config.defaultRole');
+        $defaultRole = Role::whereName(Config::get('enso.config.defaultRole'))
+            ->first()->id;
 
         $this->upgrade->permissions()
             ->reject(fn ($permission) => $this->existing->contains($permission['name']))
-            ->each(fn ($permission) => $this->create($permission));
+            ->each(fn ($permission) => $this->create($permission)->roles()->attach($defaultRole));
 
         if (App::isLocal()) {
             $this->allRoles()
-                ->reject(fn ($role) => $role->name === $this->defaultRole)
+                ->reject(fn ($role) => $role->id === $defaultRole)
                 ->each->writeConfig();
         }
     }
@@ -74,7 +74,7 @@ class Structure implements Upgrade, MigratesData
     private function upgradeRoles()
     {
         return $this->upgradeRoles ??= Role::query()
-            ->whereIn('name', [$this->defaultRole, ...$this->upgrade->roles()])
+            ->whereIn('name', $this->upgrade->roles())
             ->get();
     }
 }
