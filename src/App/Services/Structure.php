@@ -2,7 +2,7 @@
 
 namespace LaravelEnso\Upgrade\App\Services;
 
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use LaravelEnso\Permissions\App\Models\Permission;
@@ -17,6 +17,7 @@ class Structure implements Upgrade, MigratesData
     private Collection $existing;
     private Collection $allRoles;
     private Collection $upgradeRoles;
+    private string $defaultRole;
 
     public function __construct(MigratesStructure $upgrade)
     {
@@ -29,20 +30,20 @@ class Structure implements Upgrade, MigratesData
 
         $this->existing = Permission::whereIn('name', $permissions)->pluck('name');
 
-        return $permissions->isEmpty()
-            || $this->existing->count() === $permissions->count();
+        return $this->existing->count() === $permissions->count();
     }
 
     public function migrateData(): void
     {
-        $defaultRole = Role::whereName(Config::get('enso.config.defaultRole'))->first()->id;
+        $this->defaultRole = Config::get('enso.config.defaultRole');
 
         $this->upgrade->permissions()
-            ->filter(fn ($permission) => ! $this->existing->contains($permission['name']))
-            ->each(fn ($permission) => $this->create($permission)->roles()->attach($defaultRole));
+            ->reject(fn ($permission) => $this->existing->contains($permission['name']))
+            ->each(fn ($permission) => $this->create($permission));
 
         if (App::isLocal()) {
-            $this->allRoles()->filter(fn ($role) => $role->id !== $defaultRole)
+            $this->allRoles()
+                ->reject(fn ($role) => $role->name === $this->defaultRole)
                 ->each->writeConfig();
         }
     }
@@ -51,18 +52,11 @@ class Structure implements Upgrade, MigratesData
     {
         $permission = Permission::create($permission);
 
-        if (! App::isProduction()) {
-            $this->syncRoles($permission);
+        if (App::isLocal()) {
+            $permission->roles()->sync($this->roles($permission));
         }
 
         return $permission;
-    }
-
-    private function syncRoles(Permission $permission)
-    {
-        $roles = $this->roles($permission);
-
-        $permission->roles()->sync($roles->pluck('id'));
     }
 
     private function roles(Permission $permission): Collection
@@ -72,7 +66,7 @@ class Structure implements Upgrade, MigratesData
             : $this->upgradeRoles();
     }
 
-    private function allRoles()
+    private function allRoles(): Collection
     {
         return $this->allRoles ??= Role::get();
     }
@@ -80,7 +74,7 @@ class Structure implements Upgrade, MigratesData
     private function upgradeRoles()
     {
         return $this->upgradeRoles ??= Role::query()
-            ->whereIn('name', $this->upgrade->roles())
+            ->whereIn('name', [$this->defaultRole, ...$this->upgrade->roles()])
             ->get();
     }
 }
