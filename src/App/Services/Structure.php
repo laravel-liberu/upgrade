@@ -17,6 +17,7 @@ class Structure implements Upgrade, MigratesData
     private Collection $existing;
     private Collection $allRoles;
     private Collection $upgradeRoles;
+    private Role $defaultRole;
 
     public function __construct(MigratesStructure $upgrade)
     {
@@ -29,34 +30,34 @@ class Structure implements Upgrade, MigratesData
 
         $this->existing = Permission::whereIn('name', $permissions)->pluck('name');
 
-        return $this->existing->count() === $permissions->count();
+        return $this->existing->count() >= $permissions->count();
     }
 
     public function migrateData(): void
     {
-        $defaultRole = Role::whereName(Config::get('enso.config.defaultRole'))
-            ->first()->id;
+        $this->defaultRole = Role::whereName(Config::get('enso.config.defaultRole'))->get();
 
         $this->upgrade->permissions()
             ->reject(fn ($permission) => $this->existing->contains($permission['name']))
-            ->each(fn ($permission) => $this->create($permission)->roles()->attach($defaultRole));
+            ->each(fn ($permission) => $this->storeWithRoles($permission));
 
         if (App::isLocal()) {
             $this->allRoles()
-                ->reject(fn ($role) => $role->id === $defaultRole)
+                ->reject(fn ($role) => $role->is($this->defaultRole))
                 ->each->writeConfig();
         }
     }
 
-    private function create(array $permission): Permission
+    private function storeWithRoles(array $permission): void
     {
         $permission = Permission::create($permission);
 
         if (App::isLocal()) {
-            $permission->roles()->sync($this->roles($permission));
+            $permission->roles()
+                ->sync($this->roles($permission));
+        } else {
+            $permission->roles()->attach($this->defaultRole);
         }
-
-        return $permission;
     }
 
     private function roles(Permission $permission): Collection
@@ -73,8 +74,12 @@ class Structure implements Upgrade, MigratesData
 
     private function upgradeRoles()
     {
+        $hasAdmin = $this->upgrade->roles()
+            ->some(fn ($role) => $role === $this->defultRole->name);
+
         return $this->upgradeRoles ??= Role::query()
             ->whereIn('name', $this->upgrade->roles())
-            ->get();
+            ->get()
+            ->when(! $hasAdmin, fn ($roles) => $roles->push($this->defaultRole));
     }
 }
