@@ -35,7 +35,7 @@ class Structure implements Upgrade, MigratesData
 
     public function migrateData(): void
     {
-        $this->defaultRole = Role::whereName(Config::get('enso.config.defaultRole'))->get();
+        $this->defaultRole = Role::whereName(Config::get('enso.config.defaultRole'))->first();
 
         $this->upgrade->permissions()
             ->reject(fn ($permission) => $this->existing->contains($permission['name']))
@@ -75,7 +75,7 @@ class Structure implements Upgrade, MigratesData
     private function upgradeRoles()
     {
         $hasAdmin = $this->upgrade->roles()
-            ->some(fn ($role) => $role === $this->defultRole->name);
+            ->some(fn ($role) => $role === $this->defaultRole->name);
 
         return $this->upgradeRoles ??= Role::query()
             ->whereIn('name', $this->upgrade->roles())
