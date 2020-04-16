@@ -12,7 +12,6 @@ use LaravelEnso\Upgrade\App\Contracts\MigratesPostDataMigration;
 use LaravelEnso\Upgrade\App\Contracts\MigratesTable;
 use LaravelEnso\Upgrade\App\Contracts\RollbackTableMigration;
 use LaravelEnso\Upgrade\App\Contracts\Upgrade;
-use LaravelEnso\Upgrade\App\Exceptions\InvalidOperation;
 use ReflectionClass;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -42,22 +41,11 @@ class Database extends Command
 
     public function handle()
     {
-        if ($this->invalid()) {
-            throw InvalidOperation::rollback();
-        }
-
         if ($this->upgrade->isMigrated()) {
             $this->info("{$this->title} has been already done");
         } else {
             $this->start()->migrate()->end();
         }
-    }
-
-    private function invalid(): bool
-    {
-        return $this->migratesTable()
-            && $this->migratesData()
-            && ! $this->rollbacksTableMigration();
     }
 
     private function start()

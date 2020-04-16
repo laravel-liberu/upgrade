@@ -3,7 +3,9 @@
 namespace LaravelEnso\Upgrade\App\Services;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use LaravelEnso\Upgrade\App\Contracts\MigratesStructure;
+use LaravelEnso\Upgrade\App\Contracts\ShouldRunInConsole;
 use LaravelEnso\Upgrade\App\Contracts\Upgrade as Contract;
 use LaravelEnso\Upgrade\App\Exceptions\MissingInterface;
 
@@ -23,7 +25,9 @@ class Upgrade
 
     private function run($upgrade)
     {
-        (new Database($this->upgrade($upgrade)))->handle();
+        if (! $upgrade instanceof ShouldRunInConsole || App::runningInConsole()) {
+            (new Database($this->upgrade($upgrade)))->handle();
+        }
     }
 
     private function upgrade($upgrade)
