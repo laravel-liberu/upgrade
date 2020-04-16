@@ -17,6 +17,7 @@ class Structure implements Upgrade, MigratesData
     private Collection $existing;
     private Collection $allRoles;
     private Collection $upgradeRoles;
+    private Role $defaultRole;
 
     public function __construct(MigratesStructure $upgrade)
     {
@@ -27,40 +28,36 @@ class Structure implements Upgrade, MigratesData
     {
         $permissions = $this->upgrade->permissions()->pluck('name');
 
-        $this->existing = Permission::whereIn('name', $permissions)
-            ->get()->pluck('name');
+        $this->existing = Permission::whereIn('name', $permissions)->pluck('name');
 
-        return $permissions->isEmpty()
-            || $this->existing->count() === $permissions->count();
+        return $this->existing->count() >= $permissions->count();
     }
 
     public function migrateData(): void
     {
+        $this->defaultRole = Role::whereName(Config::get('enso.config.defaultRole'))->first();
+
         $this->upgrade->permissions()
-            ->filter(fn ($permission) => ! $this->existing->contains($permission['name']))
-            ->each(fn ($permission) => $this->permission($permission));
+            ->reject(fn ($permission) => $this->existing->contains($permission['name']))
+            ->each(fn ($permission) => $this->storeWithRoles($permission));
 
         if (App::isLocal()) {
-            $this->upgradeRoles
-                ->filter(fn ($role) => $role->name !== Config::get('enso.config.defaultRole'))
+            $this->allRoles()
+                ->reject(fn ($role) => $role->is($this->defaultRole))
                 ->each->writeConfig();
         }
     }
 
-    private function permission(array $permission): void
+    private function storeWithRoles(array $permission): void
     {
-        $permission = (Permission::create($permission));
+        $permission = Permission::create($permission);
 
-        if (! App::isProduction()) {
-            $this->syncRoles($permission);
+        if (App::isLocal()) {
+            $permission->roles()
+                ->sync($this->roles($permission));
+        } else {
+            $permission->roles()->attach($this->defaultRole);
         }
-    }
-
-    private function syncRoles(Permission $permission)
-    {
-        $roles = $this->roles($permission);
-
-        $permission->roles()->sync($roles->pluck('id'));
     }
 
     private function roles(Permission $permission): Collection
@@ -70,23 +67,19 @@ class Structure implements Upgrade, MigratesData
             : $this->upgradeRoles();
     }
 
-    private function allRoles()
+    private function allRoles(): Collection
     {
         return $this->allRoles ??= Role::get();
     }
 
     private function upgradeRoles()
     {
-        $defaultRole = Config::get('enso.config.defaultRole');
+        $hasAdmin = $this->upgrade->roles()
+            ->some(fn ($role) => $role === $this->defaultRole->name);
 
-        if (! isset($this->upgradeRoles)) {
-            $roles = $this->upgrade->roles()->isNotEmpty()
-                ? $this->upgrade->roles()->push($defaultRole)->unique()
-                : [$defaultRole];
-
-            $this->upgradeRoles = Role::whereIn('name', $roles)->get();
-        }
-
-        return $this->upgradeRoles;
+        return $this->upgradeRoles ??= Role::query()
+            ->whereIn('name', $this->upgrade->roles())
+            ->get()
+            ->when(! $hasAdmin, fn ($roles) => $roles->push($this->defaultRole));
     }
 }
