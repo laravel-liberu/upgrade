@@ -30,19 +30,25 @@ class Database extends Command
 
         $this->upgrade = $upgrade;
         $this->reflection = (new ReflectionClass($upgrade));
-        $this->title = $this->title();
         $this->output = new ConsoleOutput();
     }
 
     private function title(): string
     {
-        return Str::snake($this->reflection->getShortName());
+        $reflection = $this->upgrade instanceof Structure
+            ? $this->upgrade->reflection()
+            : $this->reflection;
+
+
+        $snake = Str::snake($reflection->getShortName());
+
+        return Str::ucfirst(str_replace('_', ' ', $snake));
     }
 
     public function handle()
     {
         if ($this->upgrade->isMigrated()) {
-            $this->info("{$this->title} has been already done");
+            $this->info("{$this->title()} has been already done");
         } else {
             $this->start()->migrate()->end();
         }
@@ -52,7 +58,7 @@ class Database extends Command
     {
         $this->time = microtime(true);
 
-        $this->info("{$this->title} is starting");
+        $this->info("{$this->title()} is starting");
 
         return $this;
     }
@@ -76,7 +82,7 @@ class Database extends Command
                 $this->upgrade->rollbackTableMigration();
             }
 
-            $this->error("{$this->title} was unsuccessfully, doing rollback");
+            $this->error("{$this->title()} was unsuccessfully, doing rollback");
 
             throw $exception;
         }
@@ -87,7 +93,7 @@ class Database extends Command
     private function end()
     {
         $time = (int) ((microtime(true) - $this->time) * 1000);
-        $this->info("{$this->title} was done ({$time} ms)");
+        $this->info("{$this->title()} was done ({$time} ms)");
     }
 
     private function migratesTable(): bool
