@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelEnso\Upgrade\App\Contracts;
+namespace LaravelEnso\Upgrade\Contracts;
 
 interface MigratesPostDataMigration extends Upgrade
 {

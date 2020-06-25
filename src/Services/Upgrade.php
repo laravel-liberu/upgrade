@@ -1,13 +1,13 @@
 <?php
 
-namespace LaravelEnso\Upgrade\App\Services;
+namespace LaravelEnso\Upgrade\Services;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
-use LaravelEnso\Upgrade\App\Contracts\MigratesStructure;
-use LaravelEnso\Upgrade\App\Contracts\ShouldRunInConsole;
-use LaravelEnso\Upgrade\App\Contracts\Upgrade as Contract;
-use LaravelEnso\Upgrade\App\Exceptions\MissingInterface;
+use LaravelEnso\Upgrade\Contracts\MigratesStructure;
+use LaravelEnso\Upgrade\Contracts\ShouldRunInConsole;
+use LaravelEnso\Upgrade\Contracts\Upgrade as Contract;
+use LaravelEnso\Upgrade\Exceptions\MissingInterface;
 
 class Upgrade
 {

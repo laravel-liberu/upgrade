@@ -1,15 +1,15 @@
 <?php
 
-namespace LaravelEnso\Upgrade\App\Services;
+namespace LaravelEnso\Upgrade\Services;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
-use LaravelEnso\Permissions\App\Models\Permission;
-use LaravelEnso\Roles\App\Models\Role;
-use LaravelEnso\Upgrade\App\Contracts\MigratesData;
-use LaravelEnso\Upgrade\App\Contracts\MigratesStructure;
-use LaravelEnso\Upgrade\App\Contracts\Upgrade;
+use LaravelEnso\Permissions\Models\Permission;
+use LaravelEnso\Roles\Models\Role;
+use LaravelEnso\Upgrade\Contracts\MigratesData;
+use LaravelEnso\Upgrade\Contracts\MigratesStructure;
+use LaravelEnso\Upgrade\Contracts\Upgrade;
 use ReflectionClass;
 
 class Structure implements Upgrade, MigratesData

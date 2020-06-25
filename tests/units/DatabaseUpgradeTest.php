@@ -3,12 +3,12 @@
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use LaravelEnso\Upgrade\App\Contracts\MigratesData;
-use LaravelEnso\Upgrade\App\Contracts\MigratesPostDataMigration;
-use LaravelEnso\Upgrade\App\Contracts\MigratesTable;
-use LaravelEnso\Upgrade\App\Contracts\RollbackTableMigration;
-use LaravelEnso\Upgrade\App\Helpers\Table;
-use LaravelEnso\Upgrade\App\Services\Upgrade as Service;
+use LaravelEnso\Upgrade\Contracts\MigratesData;
+use LaravelEnso\Upgrade\Contracts\MigratesPostDataMigration;
+use LaravelEnso\Upgrade\Contracts\MigratesTable;
+use LaravelEnso\Upgrade\Contracts\RollbackTableMigration;
+use LaravelEnso\Upgrade\Helpers\Table;
+use LaravelEnso\Upgrade\Services\Upgrade as Service;
 use Tests\TestCase;
 
 class DatabaseUpgradeTest extends TestCase

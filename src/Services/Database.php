@@ -1,17 +1,17 @@
 <?php
 
-namespace LaravelEnso\Upgrade\App\Services;
+namespace LaravelEnso\Upgrade\Services;
 
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use LaravelEnso\Upgrade\App\Contracts\MigratesData;
-use LaravelEnso\Upgrade\App\Contracts\MigratesPostDataMigration;
-use LaravelEnso\Upgrade\App\Contracts\MigratesTable;
-use LaravelEnso\Upgrade\App\Contracts\RollbackTableMigration;
-use LaravelEnso\Upgrade\App\Contracts\Upgrade;
+use LaravelEnso\Upgrade\Contracts\MigratesData;
+use LaravelEnso\Upgrade\Contracts\MigratesPostDataMigration;
+use LaravelEnso\Upgrade\Contracts\MigratesTable;
+use LaravelEnso\Upgrade\Contracts\RollbackTableMigration;
+use LaravelEnso\Upgrade\Contracts\Upgrade;
 use ReflectionClass;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
