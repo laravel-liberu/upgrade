@@ -39,7 +39,6 @@ class Database extends Command
             ? $this->upgrade->reflection()
             : $this->reflection;
 
-
         $snake = Str::snake($reflection->getShortName());
 
         return Str::ucfirst(str_replace('_', ' ', $snake));

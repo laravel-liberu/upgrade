@@ -39,12 +39,12 @@ class Structure implements Upgrade, MigratesData
         $this->defaultRole = Role::whereName(Config::get('enso.config.defaultRole'))->first();
 
         $this->upgrade->permissions()
-            ->reject(fn($permission) => $this->existing->contains($permission['name']))
-            ->each(fn($permission) => $this->storeWithRoles($permission));
+            ->reject(fn ($permission) => $this->existing->contains($permission['name']))
+            ->each(fn ($permission) => $this->storeWithRoles($permission));
 
         if (App::isLocal()) {
             $this->allRoles()
-                ->reject(fn($role) => $role->is($this->defaultRole))
+                ->reject(fn ($role) => $role->is($this->defaultRole))
                 ->each->writeConfig();
         }
     }
@@ -77,11 +77,11 @@ class Structure implements Upgrade, MigratesData
     private function upgradeRoles()
     {
         $hasAdmin = $this->upgrade->roles()
-            ->some(fn($role) => $role === $this->defaultRole->name);
+            ->some(fn ($role) => $role === $this->defaultRole->name);
 
         return $this->upgradeRoles ??= Role::query()
             ->whereIn('name', $this->upgrade->roles())
             ->get()
-            ->when(! $hasAdmin, fn($roles) => $roles->push($this->defaultRole));
+            ->when(! $hasAdmin, fn ($roles) => $roles->push($this->defaultRole));
     }
 }
