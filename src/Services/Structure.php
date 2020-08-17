@@ -8,12 +8,13 @@ use Illuminate\Support\Facades\Config;
 use LaravelEnso\Permissions\Models\Permission;
 use LaravelEnso\Roles\Models\Role;
 use LaravelEnso\Upgrade\Contracts\MigratesData;
+use LaravelEnso\Upgrade\Contracts\MigratesPostDataMigration;
 use LaravelEnso\Upgrade\Contracts\MigratesStructure;
 use LaravelEnso\Upgrade\Contracts\Priority;
 use LaravelEnso\Upgrade\Contracts\Upgrade;
 use ReflectionClass;
 
-class Structure implements Upgrade, MigratesData, Priority
+class Structure implements Upgrade, MigratesData, Priority, MigratesPostDataMigration
 {
     private MigratesStructure $upgrade;
     private Collection $existing;
@@ -60,6 +61,13 @@ class Structure implements Upgrade, MigratesData, Priority
         return $this->upgrade instanceof Priority
             ? $this->upgrade->priority()
             : Priority::Default;
+    }
+
+    public function migratePostDataMigration(): void
+    {
+        if ($this->upgrade instanceof MigratesPostDataMigration) {
+            $this->upgrade->migratePostDataMigration();
+        }
     }
 
     private function storeWithRoles(array $permission): void
