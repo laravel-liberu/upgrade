@@ -17,7 +17,7 @@ class Package
 
     public function isPackage(): bool
     {
-        return File::exists($this->dir . DIRECTORY_SEPARATOR . 'composer.json');
+        return File::exists($this->dir.DIRECTORY_SEPARATOR.'composer.json');
     }
 
     public function hasUpgrade(): bool
@@ -38,7 +38,7 @@ class Package
     private function appDir(...$parts): string
     {
         return (new Collection([
-            $this->dir, $this->psr4Dir(), ...$parts
+            $this->dir, $this->psr4Dir(), ...$parts,
         ]))->implode(DIRECTORY_SEPARATOR);
     }
 
@@ -67,7 +67,7 @@ class Package
     private function composer(): array
     {
         return json_decode(
-            File::get($this->dir . DIRECTORY_SEPARATOR . 'composer.json'),
+            File::get($this->dir.DIRECTORY_SEPARATOR.'composer.json'),
             true
         );
     }

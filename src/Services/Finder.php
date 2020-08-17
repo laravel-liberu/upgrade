@@ -24,10 +24,10 @@ class Finder
     private function initUpgrades(): Collection
     {
         return (new Collection(static::$vendors))
-            ->map(fn ($vendor) => base_path('vendor' . DIRECTORY_SEPARATOR . $vendor))
+            ->map(fn ($vendor) => base_path('vendor'.DIRECTORY_SEPARATOR.$vendor))
             ->map(fn ($vendor) => File::directories($vendor))
             ->flatten()
-            ->concat((new Collection(static::$dirs))->map(fn($dir) => base_path($dir)))
+            ->concat((new Collection(static::$dirs))->map(fn ($dir) => base_path($dir)))
             ->map(fn ($path) => new Package($path))
             ->filter->isPackage();
     }

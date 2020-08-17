@@ -29,7 +29,7 @@ class UpgradeStatus extends Command
                 'changedAt' => __(':dateTime (:diff)', [
                     'dateTime' => $status['changedAt']->format('Y-m-d H:i:s'),
                     'diff' => $status['changedAt']->diffForHumans(),
-                ])
+                ]),
             ]));
     }
 

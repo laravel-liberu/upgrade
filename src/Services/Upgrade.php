@@ -29,7 +29,7 @@ class Upgrade
     protected function sorted(): Collection
     {
         return $this->finder->upgrades()
-            ->sortBy(fn ($upgrade) => $this->priority($upgrade) . $this->changedAt($upgrade)->timestamp);
+            ->sortBy(fn ($upgrade) => $this->priority($upgrade).$this->changedAt($upgrade)->timestamp);
     }
 
     protected function priority(Contract $upgrade): int
