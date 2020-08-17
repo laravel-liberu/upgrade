@@ -9,10 +9,11 @@ use LaravelEnso\Permissions\Models\Permission;
 use LaravelEnso\Roles\Models\Role;
 use LaravelEnso\Upgrade\Contracts\MigratesData;
 use LaravelEnso\Upgrade\Contracts\MigratesStructure;
+use LaravelEnso\Upgrade\Contracts\Priority;
 use LaravelEnso\Upgrade\Contracts\Upgrade;
 use ReflectionClass;
 
-class Structure implements Upgrade, MigratesData
+class Structure implements Upgrade, MigratesData, Priority
 {
     private MigratesStructure $upgrade;
     private Collection $existing;
@@ -52,6 +53,13 @@ class Structure implements Upgrade, MigratesData
     public function reflection()
     {
         return new ReflectionClass($this->upgrade);
+    }
+
+    public function priority(): int
+    {
+        return $this->upgrade instanceof Priority
+            ? $this->upgrade->priority()
+            : Priority::Default;
     }
 
     private function storeWithRoles(array $permission): void

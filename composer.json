@@ -24,5 +24,13 @@
         "psr-4": {
             "LaravelEnso\\Upgrade\\": "src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LaravelEnso\\Upgrade\\AppServiceProvider"
+            ],
+            "aliases": {}
+        }
     }
 }

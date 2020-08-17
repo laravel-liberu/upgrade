@@ -1,24 +1,35 @@
 <?php
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use LaravelEnso\Upgrade\Contracts\MigratesData;
 use LaravelEnso\Upgrade\Contracts\MigratesPostDataMigration;
 use LaravelEnso\Upgrade\Contracts\MigratesTable;
+use LaravelEnso\Upgrade\Contracts\Priority;
 use LaravelEnso\Upgrade\Contracts\RollbackTableMigration;
 use LaravelEnso\Upgrade\Helpers\Table;
+use LaravelEnso\Upgrade\Services\Finder;
 use LaravelEnso\Upgrade\Services\Upgrade as Service;
 use Tests\TestCase;
 
 class DatabaseUpgradeTest extends TestCase
 {
+    public static array $calls = [];
     use RefreshDatabase;
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        static::$calls = [];
+    }
 
     /** @test */
     public function can_upgrade()
     {
-        (new Service([TestDatabaseMigration::class]))->handle();
+        (new Service($this->finder(TestDatabaseMigration::class)))->handle();
 
         $this->assertTrue(Table::hasColumn('test', 'name'));
         $this->assertTrue(Table::hasColumn('test', 'post_migration'));
@@ -26,11 +37,23 @@ class DatabaseUpgradeTest extends TestCase
     }
 
     /** @test */
+    public function can_upgrade_with_priorities()
+    {
+        (new Service($this->finder(
+            PriorityNormal::class, PriorityEmergency::class,
+        )))->handle();
+
+        $this->assertEquals([
+            PriorityEmergency::class, PriorityNormal::class
+        ], static::$calls);
+    }
+
+    /** @test */
     public function cannot_migrate_when_data_migration_fails()
     {
         $this->expectException(Exception::class);
 
-        (new Service([FailingDataMigrationTest::class]))->handle();
+        (new Service($this->finder(FailingDataMigrationTest::class)))->handle();
 
         $this->assertFalse(Schema::hasTable('test'));
     }
@@ -40,7 +63,7 @@ class DatabaseUpgradeTest extends TestCase
     {
         $this->expectException(Exception::class);
 
-        (new Service([FailingPostMigrationTest::class]))->handle();
+        (new Service($this->finder(FailingPostMigrationTest::class)))->handle();
 
         $this->assertFalse(Schema::hasTable('test'));
     }
@@ -48,9 +71,17 @@ class DatabaseUpgradeTest extends TestCase
     /** @test */
     public function cannot_migrate_twice()
     {
-        (new Service([AlreadyMigratedMigrationTest::class]))->handle();
+        (new Service($this->finder(AlreadyMigratedMigrationTest::class)))->handle();
 
         $this->assertFalse(Schema::hasTable('test'));
+    }
+
+    private function finder(...$classes)
+    {
+        return Mockery::mock(Finder::class)
+            ->allows([
+                'upgrades' => (new Collection($classes))->map(fn ($class) => new $class)
+            ]);
     }
 }
 
@@ -112,5 +143,38 @@ class AlreadyMigratedMigrationTest extends TestDatabaseMigration
     public function isMigrated(): bool
     {
         return true;
+    }
+}
+
+
+class PriorityEmergency implements Priority, MigratesTable
+{
+    public function isMigrated(): bool
+    {
+        return false;
+    }
+
+    public function priority(): int
+    {
+        return 0;
+    }
+
+    public function migrateTable(): void
+    {
+        DatabaseUpgradeTest::$calls[] = static::class;
+    }
+}
+
+
+class PriorityNormal implements MigratesTable
+{
+    public function isMigrated(): bool
+    {
+        return false;
+    }
+
+    public function migrateTable(): void
+    {
+        DatabaseUpgradeTest::$calls[] = static::class;
     }
 }

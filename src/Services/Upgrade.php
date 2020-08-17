@@ -2,44 +2,58 @@
 
 namespace LaravelEnso\Upgrade\Services;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
-use LaravelEnso\Upgrade\Contracts\MigratesStructure;
+use LaravelEnso\Upgrade\Contracts\Priority;
 use LaravelEnso\Upgrade\Contracts\ShouldRunInConsole;
 use LaravelEnso\Upgrade\Contracts\Upgrade as Contract;
-use LaravelEnso\Upgrade\Exceptions\MissingInterface;
+use ReflectionClass;
 
 class Upgrade
 {
-    private Collection $upgrades;
+    protected $finder;
 
-    public function __construct(array $upgrades)
+    public function __construct($finder = null)
     {
-        $this->upgrades = new Collection($upgrades);
+        $this->finder = $finder ?? new Finder();
     }
 
     public function handle()
     {
-        $this->upgrades->each(fn ($upgrade) => $this->run(new $upgrade));
+        $this->sorted()
+            ->filter(fn ($upgrade) => $this->canRun($upgrade))
+            ->each(fn ($upgrade) => (new Database($upgrade))->handle());
     }
 
-    private function run($upgrade)
+    protected function sorted(): Collection
     {
-        if (! $upgrade instanceof ShouldRunInConsole || App::runningInConsole()) {
-            (new Database($this->upgrade($upgrade)))->handle();
-        }
+        return $this->finder->upgrades()
+            ->sortBy(fn ($upgrade) => $this->priority($upgrade) . $this->changedAt($upgrade)->timestamp);
     }
 
-    private function upgrade($upgrade)
+    protected function priority(Contract $upgrade): int
     {
-        if ($upgrade instanceof MigratesStructure) {
-            return new Structure($upgrade);
-        }
+        return $upgrade instanceof Priority
+            ? $upgrade->priority()
+            : Priority::Default;
+    }
 
-        if ($upgrade instanceof Contract) {
-            return $upgrade;
-        }
+    protected function reflection(Contract $upgrade): ReflectionClass
+    {
+        return $upgrade instanceof Structure
+            ? $upgrade->reflection()
+            : new ReflectionClass($upgrade);
+    }
 
-        throw new MissingInterface();
+    protected function changedAt($upgrade): Carbon
+    {
+        return Carbon::createFromTimestamp(filectime($this->reflection($upgrade)->getFileName()));
+    }
+
+    private function canRun($upgrade): bool
+    {
+        return ! $upgrade instanceof ShouldRunInConsole
+            || App::runningInConsole();
     }
 }
