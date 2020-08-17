@@ -45,7 +45,7 @@ class Package
     private function namespace(...$parts): string
     {
         return (new Collection([
-            rtrim($this->psr4Namespace(), '\\'), ...$parts
+            rtrim($this->psr4Namespace(), '\\'), ...$parts,
         ]))->filter()->implode('\\');
     }
 
