@@ -40,11 +40,11 @@ class DatabaseUpgradeTest extends TestCase
     public function can_upgrade_with_priorities()
     {
         (new Service($this->finder(
-            PriorityNormal::class, PriorityEmergency::class,
+            PriorityDefault::class, PriorityHighest::class,
         )))->handle();
 
         $this->assertEquals([
-            PriorityEmergency::class, PriorityNormal::class
+            PriorityHighest::class, PriorityDefault::class
         ], static::$calls);
     }
 
@@ -147,7 +147,7 @@ class AlreadyMigratedMigrationTest extends TestDatabaseMigration
 }
 
 
-class PriorityEmergency implements Priority, MigratesTable
+class PriorityHighest implements Priority, MigratesTable
 {
     public function isMigrated(): bool
     {
@@ -166,7 +166,7 @@ class PriorityEmergency implements Priority, MigratesTable
 }
 
 
-class PriorityNormal implements MigratesTable
+class PriorityDefault implements MigratesTable
 {
     public function isMigrated(): bool
     {

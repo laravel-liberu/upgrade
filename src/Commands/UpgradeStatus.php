@@ -26,10 +26,8 @@ class UpgradeStatus extends Command
             ->handle()
             ->map(fn ($status) => array_merge($status, [
                 'isMigrated' => $status['isMigrated'] ? $this->green('Yes') : $this->red('No'),
-                'changedAt' => __(':dateTime (:diff)', [
-                    'dateTime' => $status['changedAt']->format('Y-m-d H:i:s'),
-                    'diff' => $status['changedAt']->diffForHumans(),
-                ]),
+                'changedAt' => $status['changedAt']->format('Y-m-d H:i:s').
+                    " ({$status['changedAt']->diffForHumans()})",
             ]));
     }
 
