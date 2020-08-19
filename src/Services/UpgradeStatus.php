@@ -10,7 +10,7 @@ class UpgradeStatus extends Upgrade
     {
         return $this->sorted()->map(fn (Contract $upgrade) => [
             'isMigrated' => $upgrade->isMigrated(),
-            'fileName' => $this->reflection($upgrade)->getName(),
+            'namespace' => $this->reflection($upgrade)->getName(),
             'priority' => $this->priority($upgrade),
             'changedAt' => $this->changedAt($upgrade),
         ]);

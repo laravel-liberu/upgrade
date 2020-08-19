@@ -4,6 +4,8 @@ namespace LaravelEnso\Upgrade\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 use LaravelEnso\Upgrade\Services\UpgradeStatus as Service;
 
 class UpgradeStatus extends Command
@@ -15,7 +17,7 @@ class UpgradeStatus extends Command
     public function handle()
     {
         $this->table(
-            ['Ran?', 'Upgrade', 'priority', 'Changed At'],
+            ['Ran?', 'Package', 'Upgrade', 'Priority', 'Modified At'],
             $this->rows()
         );
     }
@@ -24,20 +26,35 @@ class UpgradeStatus extends Command
     {
         return (new Service())
             ->handle()
-            ->map(fn ($status) => array_merge($status, [
-                'isMigrated' => $status['isMigrated'] ? $this->green('Yes') : $this->red('No'),
-                'changedAt' => $status['changedAt']->format('Y-m-d H:i:s').
+            ->map(fn ($status) => [
+                'Ran?' => $status['isMigrated'] ? $this->green('Yes') : $this->red('No'),
+                'Package' => $this->package($status['namespace']),
+                'Upgrade' => $this->class($status['namespace']),
+                'Priority' => $status['priority'],
+                'Modified At' => $status['changedAt']->format(Config::get('enso.config.dateTimeFormat')).
                     " ({$status['changedAt']->diffForHumans()})",
-            ]));
+            ]);
     }
 
-    private function green($msg): string
+    private function green($label): string
     {
-        return "<info>$msg</info>";
+        return "<info>$label</info>";
     }
 
-    private function red($msg): string
+    private function red($label): string
     {
-        return "<fg=red>$msg</fg=red>";
+        return "<fg=red>$label</fg=red>";
+    }
+
+    private function package($upgrade): string
+    {
+        return Str::startsWith($upgrade, 'App')
+            ? 'App'
+            : explode('\\', $upgrade)[1];
+    }
+
+    private function class($upgrade): string
+    {
+        return last(explode('\\', $upgrade));
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use LaravelEnso\Upgrade\Contracts\MigratesData;
 use LaravelEnso\Upgrade\Contracts\MigratesPostDataMigration;
 use LaravelEnso\Upgrade\Contracts\MigratesTable;
-use LaravelEnso\Upgrade\Contracts\Priority;
+use LaravelEnso\Upgrade\Contracts\Prioritization;
 use LaravelEnso\Upgrade\Contracts\RollbackTableMigration;
 use LaravelEnso\Upgrade\Helpers\Table;
 use LaravelEnso\Upgrade\Services\Finder;
@@ -40,11 +40,11 @@ class DatabaseUpgradeTest extends TestCase
     public function can_upgrade_with_priorities()
     {
         (new Service($this->finder(
-            PriorityDefault::class, PriorityHighest::class,
+            PriorityDefault::class, PrioritizationHighest::class,
         )))->handle();
 
         $this->assertEquals([
-            PriorityHighest::class, PriorityDefault::class
+            PrioritizationHighest::class, PriorityDefault::class
         ], static::$calls);
     }
 
@@ -147,7 +147,7 @@ class AlreadyMigratedMigrationTest extends TestDatabaseMigration
 }
 
 
-class PriorityHighest implements Priority, MigratesTable
+class PrioritizationHighest implements Prioritization, MigratesTable
 {
     public function isMigrated(): bool
     {

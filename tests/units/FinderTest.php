@@ -29,7 +29,7 @@ class FinderTest extends TestCase
 
         File::copyDirectory(__DIR__ . '/../stubs', $this->package());
         $this->register();
-        Finder::$dirs = ['vendor/laravel-enso/testUpgrades'];
+        Finder::$folders = ['vendor/laravel-enso/testUpgrades'];
         Finder::$vendors = [];
     }
 
@@ -81,10 +81,10 @@ class FinderTest extends TestCase
             ->filter(fn ($upgrade) => get_class($upgrade) === $class);
     }
 
-    private function package(...$dirs): string
+    private function package(...$folders): string
     {
         return base_path(
-            (new Collection(['vendor/laravel-enso/testUpgrades', ...$dirs]))
+            (new Collection(['vendor/laravel-enso/testUpgrades', ...$folders]))
                 ->implode(DIRECTORY_SEPARATOR)
         );
     }

@@ -5,8 +5,9 @@ namespace LaravelEnso\Upgrade\Services;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
-use LaravelEnso\Upgrade\Contracts\Priority;
-use LaravelEnso\Upgrade\Contracts\ShouldRunInConsole;
+use Illuminate\Support\Facades\File;
+use LaravelEnso\Upgrade\Contracts\Prioritization;
+use LaravelEnso\Upgrade\Contracts\ShouldRunManually;
 use LaravelEnso\Upgrade\Contracts\Upgrade as Contract;
 use ReflectionClass;
 
@@ -34,9 +35,9 @@ class Upgrade
 
     protected function priority(Contract $upgrade): int
     {
-        return $upgrade instanceof Priority
+        return $upgrade instanceof Prioritization
             ? $upgrade->priority()
-            : Priority::Default;
+            : Prioritization::Default;
     }
 
     protected function reflection(Contract $upgrade): ReflectionClass
@@ -48,12 +49,14 @@ class Upgrade
 
     protected function changedAt($upgrade): Carbon
     {
-        return Carbon::createFromTimestamp(filectime($this->reflection($upgrade)->getFileName()));
+        return Carbon::createFromTimestamp(
+            File::lastModified($this->reflection($upgrade)->getFileName())
+        );
     }
 
     private function canRun($upgrade): bool
     {
-        return ! $upgrade instanceof ShouldRunInConsole
+        return ! $upgrade instanceof ShouldRunManually
             || App::runningInConsole();
     }
 }

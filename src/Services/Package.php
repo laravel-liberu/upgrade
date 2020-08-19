@@ -8,26 +8,26 @@ use Symfony\Component\Finder\SplFileInfo;
 
 class Package
 {
-    private string $dir;
+    private string $folder;
 
-    public function __construct(string $dir)
+    public function __construct(string $folder)
     {
-        $this->dir = $dir;
+        $this->folder = $folder;
     }
 
     public function isPackage(): bool
     {
-        return File::exists($this->dir.DIRECTORY_SEPARATOR.'composer.json');
+        return File::exists($this->folder.DIRECTORY_SEPARATOR.'composer.json');
     }
 
     public function hasUpgrade(): bool
     {
-        return is_dir($this->upgradeDir());
+        return File::isDirectory($this->upgradeFolder());
     }
 
-    public function upgradeClasses(...$parts)
+    public function upgradeClasses()
     {
-        return (new Collection(File::allFiles($this->upgradeDir())))
+        return (new Collection(File::allFiles($this->upgradeFolder())))
             ->map(fn (SplFileInfo $file) => $this->namespace(
                 'Upgrades',
                 $file->getRelativePath('Upgrades'),
@@ -35,10 +35,10 @@ class Package
             ));
     }
 
-    private function appDir(...$parts): string
+    private function appFolder(...$parts): string
     {
         return (new Collection([
-            $this->dir, $this->psr4Dir(), ...$parts,
+            $this->folder, $this->psr4Folder(), ...$parts,
         ]))->implode(DIRECTORY_SEPARATOR);
     }
 
@@ -49,12 +49,12 @@ class Package
         ]))->filter()->implode('\\');
     }
 
-    private function upgradeDir(...$parts)
+    private function upgradeFolder(...$parts)
     {
-        return $this->appDir('Upgrades', ...$parts);
+        return $this->appFolder('Upgrades', ...$parts);
     }
 
-    private function psr4Dir()
+    private function psr4Folder()
     {
         return $this->composer()['autoload']['psr-4'][$this->psr4Namespace()];
     }
@@ -67,7 +67,7 @@ class Package
     private function composer(): array
     {
         return json_decode(
-            File::get($this->dir.DIRECTORY_SEPARATOR.'composer.json'),
+            File::get($this->folder.DIRECTORY_SEPARATOR.'composer.json'),
             true
         );
     }

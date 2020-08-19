@@ -10,14 +10,14 @@ use ReflectionClass;
 
 class Finder
 {
-    public static $dirs = ['.'];
-    public static $vendors = ['laravel-enso'];
+    public static array $folders = ['.'];
+    public static array $vendors = ['laravel-enso'];
 
     public function upgrades(): Collection
     {
         return $this->initUpgrades()
             ->filter->hasUpgrade()
-            ->map(fn ($dir) => $this->upgradeClasses($dir))
+            ->map(fn ($folder) => $this->upgradeClasses($folder))
             ->flatten();
     }
 
@@ -27,7 +27,7 @@ class Finder
             ->map(fn ($vendor) => base_path('vendor'.DIRECTORY_SEPARATOR.$vendor))
             ->map(fn ($vendor) => File::directories($vendor))
             ->flatten()
-            ->concat((new Collection(static::$dirs))->map(fn ($dir) => base_path($dir)))
+            ->concat((new Collection(static::$folders))->map(fn ($folder) => base_path($folder)))
             ->map(fn ($path) => new Package($path))
             ->filter->isPackage();
     }
