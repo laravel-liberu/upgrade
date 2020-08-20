@@ -1,0 +1,8 @@
+{
+    "name": "laravel-enso/testUpgrade",
+    "autoload": {
+        "psr-4": {
+            "LaravelEnso\\TestUpgrade\\": "src/"
+        }
+    }
+}

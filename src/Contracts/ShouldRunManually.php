@@ -2,6 +2,6 @@
 
 namespace LaravelEnso\Upgrade\Contracts;
 
-interface ShouldRunInConsole
+interface ShouldRunManually
 {
 }
