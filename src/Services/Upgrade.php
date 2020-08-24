@@ -15,10 +15,19 @@ use ReflectionClass;
 class Upgrade
 {
     protected $finder;
+    private bool $manual;
 
     public function __construct($finder = null)
     {
         $this->finder = $finder ?? new Finder();
+        $this->manual = false;
+    }
+
+    public function manual(bool $manual): self
+    {
+        $this->manual = $manual;
+
+        return $this;
     }
 
     public function handle()
@@ -57,7 +66,7 @@ class Upgrade
 
     private function canRun($upgrade): bool
     {
-        if ($upgrade instanceof ShouldRunManually && ! App::runningInConsole()) {
+        if ($upgrade instanceof ShouldRunManually && ! $this->manual) {
             return false;
         }
 

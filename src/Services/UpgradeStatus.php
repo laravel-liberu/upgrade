@@ -3,6 +3,7 @@
 namespace LaravelEnso\Upgrade\Services;
 
 use LaravelEnso\Upgrade\Contracts\Applicable;
+use LaravelEnso\Upgrade\Contracts\ShouldRunManually;
 use LaravelEnso\Upgrade\Contracts\Upgrade as Contract;
 
 class UpgradeStatus extends Upgrade
@@ -14,6 +15,7 @@ class UpgradeStatus extends Upgrade
             'applicable' => $upgrade instanceof Applicable
                 ? $upgrade->applicable()
                 : true,
+            'manual' => $upgrade instanceof ShouldRunManually,
             'namespace' => $this->reflection($upgrade)->getName(),
             'priority' => $this->priority($upgrade),
             'changedAt' => $this->changedAt($upgrade),
