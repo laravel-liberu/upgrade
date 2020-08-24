@@ -12,9 +12,7 @@ class UpgradeStatus extends Upgrade
     {
         return $this->sorted()->map(fn (Contract $upgrade) => [
             'isMigrated' => $upgrade->isMigrated(),
-            'applicable' => $upgrade instanceof Applicable
-                ? $upgrade->applicable()
-                : true,
+            'applicable' => ! $upgrade instanceof Applicable || $upgrade->applicable(),
             'manual' => $upgrade instanceof ShouldRunManually,
             'namespace' => $this->reflection($upgrade)->getName(),
             'priority' => $this->priority($upgrade),

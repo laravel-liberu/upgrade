@@ -73,9 +73,8 @@ class Structure implements Upgrade, MigratesData, Prioritization, MigratesPostDa
 
     public function applicable(): bool
     {
-        return $this->upgrade instanceof Applicable
-            ? $this->upgrade->applicable()
-            : true;
+        return ! $this->upgrade instanceof Applicable
+            || $this->upgrade->applicable();
     }
 
     private function storeWithRoles(array $permission): void
