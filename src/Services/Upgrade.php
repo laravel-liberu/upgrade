@@ -4,7 +4,6 @@ namespace LaravelEnso\Upgrade\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
 use LaravelEnso\Upgrade\Contracts\Applicable;
 use LaravelEnso\Upgrade\Contracts\Prioritization;

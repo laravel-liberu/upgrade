@@ -32,7 +32,7 @@ class UpgradeStatus extends Command
                 'Upgrade' => $this->class($status['namespace']),
                 'Priority' => $status['priority'],
                 'Applicable' => $status['applicable'] ? $this->green('Yes') : $this->yellow('No'),
-                'Manual' => $status['manual']  ? $this->yellow('Yes') : $this->green('No'),
+                'Manual' => $status['manual'] ? $this->yellow('Yes') : $this->green('No'),
                 'Modified At' => $status['changedAt']->format(Config::get('enso.config.dateTimeFormat')).
                     " ({$status['changedAt']->diffForHumans()})",
             ]);
