@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
+use LaravelEnso\Upgrade\Contracts\Applicable;
 use LaravelEnso\Upgrade\Contracts\Prioritization;
 use LaravelEnso\Upgrade\Contracts\ShouldRunManually;
 use LaravelEnso\Upgrade\Contracts\Upgrade as Contract;
@@ -56,7 +57,14 @@ class Upgrade
 
     private function canRun($upgrade): bool
     {
-        return ! $upgrade instanceof ShouldRunManually
-            || App::runningInConsole();
+        if ($upgrade instanceof ShouldRunManually && ! App::runningInConsole()) {
+            return false;
+        }
+
+        if ($upgrade instanceof Applicable && ! $upgrade->applicable()) {
+            return false;
+        }
+
+        return true;
     }
 }

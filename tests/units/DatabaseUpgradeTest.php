@@ -4,6 +4,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use LaravelEnso\Upgrade\Contracts\Applicable;
 use LaravelEnso\Upgrade\Contracts\MigratesData;
 use LaravelEnso\Upgrade\Contracts\MigratesPostDataMigration;
 use LaravelEnso\Upgrade\Contracts\MigratesTable;
@@ -74,6 +75,14 @@ class DatabaseUpgradeTest extends TestCase
         (new Service($this->finder(AlreadyMigratedMigrationTest::class)))->handle();
 
         $this->assertFalse(Schema::hasTable('test'));
+    }
+
+    /** @test */
+    public function cannot_migrate_not_applicable()
+    {
+        (new Service($this->finder(NotApplicable::class)))->handle();
+
+        $this->assertNotContains(NotApplicable::class, static::$calls);
     }
 
     private function finder(...$classes)
@@ -176,5 +185,24 @@ class PriorityDefault implements MigratesTable
     public function migrateTable(): void
     {
         DatabaseUpgradeTest::$calls[] = static::class;
+    }
+}
+
+
+class NotApplicable implements MigratesTable, Applicable
+{
+    public function isMigrated(): bool
+    {
+        return false;
+    }
+
+    public function migrateTable(): void
+    {
+        DatabaseUpgradeTest::$calls[] = static::class;
+    }
+
+    public function applicable(): bool
+    {
+        return false;
     }
 }
