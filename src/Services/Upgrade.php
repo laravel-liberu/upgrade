@@ -4,8 +4,8 @@ namespace LaravelEnso\Upgrade\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
+use LaravelEnso\Upgrade\Contracts\Applicable;
 use LaravelEnso\Upgrade\Contracts\Prioritization;
 use LaravelEnso\Upgrade\Contracts\ShouldRunManually;
 use LaravelEnso\Upgrade\Contracts\Upgrade as Contract;
@@ -14,10 +14,19 @@ use ReflectionClass;
 class Upgrade
 {
     protected $finder;
+    private bool $manual;
 
     public function __construct($finder = null)
     {
         $this->finder = $finder ?? new Finder();
+        $this->manual = false;
+    }
+
+    public function manual(bool $manual): self
+    {
+        $this->manual = $manual;
+
+        return $this;
     }
 
     public function handle()
@@ -56,7 +65,14 @@ class Upgrade
 
     private function canRun($upgrade): bool
     {
-        return ! $upgrade instanceof ShouldRunManually
-            || App::runningInConsole();
+        if ($upgrade instanceof ShouldRunManually && ! $this->manual) {
+            return false;
+        }
+
+        if ($upgrade instanceof Applicable && ! $upgrade->applicable()) {
+            return false;
+        }
+
+        return true;
     }
 }

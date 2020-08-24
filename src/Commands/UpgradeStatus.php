@@ -17,7 +17,7 @@ class UpgradeStatus extends Command
     public function handle()
     {
         $this->table(
-            ['Ran?', 'Package', 'Upgrade', 'Priority', 'Modified At'],
+            ['Ran?', 'Package', 'Upgrade', 'Priority', 'Applicable', 'Manual', 'Modified At'],
             $this->rows()
         );
     }
@@ -31,6 +31,8 @@ class UpgradeStatus extends Command
                 'Package' => $this->package($status['namespace']),
                 'Upgrade' => $this->class($status['namespace']),
                 'Priority' => $status['priority'],
+                'Applicable' => $status['applicable'] ? $this->green('Yes') : $this->yellow('No'),
+                'Manual' => $status['manual'] ? $this->yellow('Yes') : $this->green('No'),
                 'Modified At' => $status['changedAt']->format(Config::get('enso.config.dateTimeFormat')).
                     " ({$status['changedAt']->diffForHumans()})",
             ]);
@@ -44,6 +46,11 @@ class UpgradeStatus extends Command
     private function red($label): string
     {
         return "<fg=red>$label</fg=red>";
+    }
+
+    private function yellow($label): string
+    {
+        return "<fg=yellow>$label</fg=yellow>";
     }
 
     private function package($upgrade): string
