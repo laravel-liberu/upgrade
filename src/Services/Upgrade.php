@@ -39,14 +39,17 @@ class Upgrade
     protected function sorted(): Collection
     {
         return $this->finder->upgrades()
-            ->sortBy(fn ($upgrade) => $this->priority($upgrade).$this->changedAt($upgrade)->timestamp);
+            //refactor when sortUsing is added to Collection
+            ->sortBy(fn ($upgrade) => $this->priority($upgrade)
+                .$this->lastModifiedAt($upgrade)->timestamp);
     }
 
     protected function priority(Contract $upgrade): int
     {
         return $upgrade instanceof Prioritization
             ? $upgrade->priority()
-            : Prioritization::Default;
+            : Prioritization::
+            Default;
     }
 
     protected function reflection(Contract $upgrade): ReflectionClass
@@ -56,11 +59,11 @@ class Upgrade
             : new ReflectionClass($upgrade);
     }
 
-    protected function changedAt($upgrade): Carbon
+    protected function lastModifiedAt($upgrade): Carbon
     {
-        return Carbon::createFromTimestamp(
-            File::lastModified($this->reflection($upgrade)->getFileName())
-        );
+        $lastModified = File::lastModified($this->reflection($upgrade)->getFileName());
+
+        return Carbon::createFromTimestamp($lastModified);
     }
 
     private function canRun($upgrade): bool

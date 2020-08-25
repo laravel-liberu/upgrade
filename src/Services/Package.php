@@ -4,25 +4,30 @@ namespace LaravelEnso\Upgrade\Services;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use LaravelEnso\Helpers\Services\JsonReader;
+use LaravelEnso\Upgrade\Contracts\MigratesStructure;
+use LaravelEnso\Upgrade\Contracts\Upgrade;
+use ReflectionClass;
 use Symfony\Component\Finder\SplFileInfo;
 
 class Package
 {
     private string $folder;
+    private array $composer;
 
     public function __construct(string $folder)
     {
         $this->folder = $folder;
     }
 
-    public function isPackage(): bool
+    public function qualifies(): bool
     {
-        return File::exists($this->folder.DIRECTORY_SEPARATOR.'composer.json');
-    }
+        if ($this->hasUpgrades()) {
+            \Log::info($this->folder);
+        }
 
-    public function hasUpgrade(): bool
-    {
-        return File::isDirectory($this->upgradeFolder());
+        return File::exists($this->folder.DIRECTORY_SEPARATOR.'composer.json')
+            && $this->hasUpgrades();
     }
 
     public function upgradeClasses()
@@ -32,26 +37,32 @@ class Package
                 'Upgrades',
                 $file->getRelativePath('Upgrades'),
                 $file->getFilenameWithoutExtension()
-            ));
+            ))->filter(fn ($class) => $this->isUpgrade($class));
     }
 
-    private function appFolder(...$parts): string
+    private function hasUpgrades(): bool
     {
-        return (new Collection([
-            $this->folder, $this->psr4Folder(), ...$parts,
-        ]))->implode(DIRECTORY_SEPARATOR);
+        \Log::info($this->upgradeFolder());
+
+        return File::isDirectory($this->upgradeFolder());
     }
 
-    private function namespace(...$parts): string
+    private function namespace(...$segments): string
     {
         return (new Collection([
-            rtrim($this->psr4Namespace(), '\\'), ...$parts,
+            rtrim($this->psr4Namespace(), '\\'), ...$segments,
         ]))->filter()->implode('\\');
     }
 
-    private function upgradeFolder(...$parts)
+    private function upgradeFolder()
     {
-        return $this->appFolder('Upgrades', ...$parts);
+        return $this->appFolder('Upgrades');
+    }
+
+    private function appFolder(...$segments): string
+    {
+        return (new Collection([$this->folder, $this->psr4Folder(), ...$segments]))
+            ->implode(DIRECTORY_SEPARATOR);
     }
 
     private function psr4Folder()
@@ -66,9 +77,18 @@ class Package
 
     private function composer(): array
     {
-        return json_decode(
-            File::get($this->folder.DIRECTORY_SEPARATOR.'composer.json'),
-            true
-        );
+        return isset($this->composer)
+            ? $this->composer
+            : $this->composer = (new JsonReader(
+                $this->folder.DIRECTORY_SEPARATOR.'composer.json'
+            ))->array();
+    }
+
+    private function isUpgrade($class): bool
+    {
+        $reflection = new ReflectionClass($class);
+
+        return $reflection->implementsInterface(MigratesStructure::class)
+            || $reflection->implementsInterface(Upgrade::class);
     }
 }
