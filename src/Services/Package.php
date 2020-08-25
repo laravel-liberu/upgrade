@@ -22,10 +22,6 @@ class Package
 
     public function qualifies(): bool
     {
-        if ($this->hasUpgrades()) {
-            \Log::info($this->folder);
-        }
-
         return File::exists($this->folder.DIRECTORY_SEPARATOR.'composer.json')
             && $this->hasUpgrades();
     }
@@ -42,8 +38,6 @@ class Package
 
     private function hasUpgrades(): bool
     {
-        \Log::info($this->upgradeFolder());
-
         return File::isDirectory($this->upgradeFolder());
     }
 

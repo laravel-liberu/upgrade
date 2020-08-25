@@ -11,8 +11,6 @@ class Finder
 {
     public function upgrades(): Collection
     {
-        \Log::info($this->upgradePackages());
-
         return $this->upgradePackages()
             ->map(fn ($folder) => $this->upgradeClasses($folder))
             ->flatten();
