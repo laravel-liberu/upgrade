@@ -2,18 +2,16 @@
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
-use LaravelEnso\Roles\Models\Role;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\File;
 use LaravelEnso\TestUpgrade\Upgrades\Deep\DeepUpgrade;
 use LaravelEnso\TestUpgrade\Upgrades\POPO;
 use LaravelEnso\TestUpgrade\Upgrades\SimpleUpgrade;
 use LaravelEnso\TestUpgrade\Upgrades\StructureUpgrade;
 use LaravelEnso\Upgrade\Contracts\MigratesStructure;
-use LaravelEnso\Upgrade\Contracts\Upgrade;
 use LaravelEnso\Upgrade\Services\Finder;
 use LaravelEnso\Upgrade\Services\Structure;
-use LaravelEnso\Upgrade\Traits\StructureMigration;
 use Tests\TestCase;
-use Illuminate\Support\Facades\File;
 
 class FinderTest extends TestCase
 {
@@ -27,10 +25,10 @@ class FinderTest extends TestCase
     {
         parent::setUp();
 
-        File::copyDirectory(__DIR__ . '/../stubs', $this->package());
+        File::copyDirectory(__DIR__.'/../stubs', $this->package());
         $this->register();
-        Finder::$folders = ['vendor/laravel-enso/testUpgrades'];
-        Finder::$vendors = [];
+        Config::set('enso.upgrade.folders', ['vendor/laravel-enso/testUpgrades']);
+        Config::set('enso.upgrade.vendors', []);
     }
 
     public function tearDown(): void
@@ -69,9 +67,10 @@ class FinderTest extends TestCase
 
     protected function register(): void
     {
-        $loader = require base_path() . '/vendor/autoload.php';
+        $loader = require base_path().'/vendor/autoload.php';
         $loader->setPsr4(
-            'LaravelEnso\TestUpgrade\\', $this->package('src')
+            'LaravelEnso\TestUpgrade\\',
+            $this->package('src')
         );
     }
 

@@ -9,7 +9,7 @@ class Upgrade extends Command
 {
     protected $signature = 'enso:upgrade {--manual}';
 
-    protected $description = 'This command will upgrade Enso to the latest version';
+    protected $description = 'This command will upgrade your Enso project to the latest version';
 
     public function handle()
     {
