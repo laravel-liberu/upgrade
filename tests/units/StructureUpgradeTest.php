@@ -82,7 +82,7 @@ class StructureUpgradeTest extends TestCase
 
     protected function role($name)
     {
-        return factory(Role::class)->create([
+        return Role::factory()->create([
             'name' => $name,
         ]);
     }
