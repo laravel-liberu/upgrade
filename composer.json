@@ -16,10 +16,10 @@
     }],
     "require": {
         "php": ">=7.4.0",
-        "laravel/framework": "^7.0",
+        "laravel/framework": "^8.0",
         "laravel-enso/helpers": "^2.0",
         "laravel-enso/permissions": "^4.0",
-        "laravel-enso/roles": "^4.0"
+        "laravel-enso/roles": "^4.1"
     },
     "autoload": {
         "psr-4": {
