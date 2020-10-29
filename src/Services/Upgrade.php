@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use LaravelEnso\Upgrade\Contracts\Applicable;
+use LaravelEnso\Upgrade\Contracts\PreMigration;
 use LaravelEnso\Upgrade\Contracts\Prioritization;
 use LaravelEnso\Upgrade\Contracts\ShouldRunManually;
 use LaravelEnso\Upgrade\Contracts\Upgrade as Contract;
@@ -14,17 +15,26 @@ use ReflectionClass;
 class Upgrade
 {
     protected $finder;
+    private bool $preMigration;
     private bool $manual;
 
     public function __construct($finder = null)
     {
         $this->finder = $finder ?? new Finder();
         $this->manual = false;
+        $this->preMigration = false;
     }
 
     public function manual(bool $manual): self
     {
         $this->manual = $manual;
+
+        return $this;
+    }
+
+    public function preMigration(bool $preMigration): self
+    {
+        $this->preMigration = $preMigration;
 
         return $this;
     }
@@ -68,6 +78,10 @@ class Upgrade
 
     private function canRun($upgrade): bool
     {
+        if ($upgrade instanceof PreMigration ^ $this->preMigration) {
+            return false;
+        }
+
         if ($upgrade instanceof ShouldRunManually && ! $this->manual) {
             return false;
         }
