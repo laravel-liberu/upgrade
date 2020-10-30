@@ -21,7 +21,7 @@ class Structure implements Upgrade, MigratesData, Prioritization, MigratesPostDa
     private Collection $existing;
     private Collection $allRoles;
     private Collection $upgradeRoles;
-    private Role $defaultRole;
+    private string $defaultRole;
 
     public function __construct(MigratesStructure $upgrade)
     {
@@ -39,7 +39,7 @@ class Structure implements Upgrade, MigratesData, Prioritization, MigratesPostDa
 
     public function migrateData(): void
     {
-        $this->defaultRole = Role::whereName(Config::get('enso.config.defaultRole'))->first();
+        $this->defaultRole = Config::get('enso.config.defaultRole');
 
         Collection::wrap($this->upgrade->permissions())
             ->reject(fn ($permission) => $this->existing->contains($permission['name']))
@@ -47,7 +47,7 @@ class Structure implements Upgrade, MigratesData, Prioritization, MigratesPostDa
 
         if (App::isLocal()) {
             $this->allRoles()
-                ->reject(fn ($role) => $role->is($this->defaultRole))
+                ->reject(fn ($role) => $role->name === $this->defaultRole)
                 ->each->writeConfig();
         }
     }
@@ -99,11 +99,8 @@ class Structure implements Upgrade, MigratesData, Prioritization, MigratesPostDa
 
     private function upgradeRoles()
     {
-        $hasAdmin = in_array($this->defaultRole->name, $this->upgrade->roles());
-
-        return $this->upgradeRoles ??= Role::query()
-            ->whereIn('name', $this->upgrade->roles())
-            ->get()
-            ->when(! $hasAdmin, fn ($roles) => $roles->push($this->defaultRole));
+        return $this->upgradeRoles ??= $this->allRoles()
+            ->filter(fn ($role) => in_array($role->name, $this->upgrade->roles())
+                || $role->name === $this->defaultRole);
     }
 }
