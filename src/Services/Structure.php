@@ -30,7 +30,7 @@ class Structure implements Upgrade, MigratesData, Prioritization, MigratesPostDa
 
     public function isMigrated(): bool
     {
-        $permissions = $this->upgrade->permissions()->pluck('name');
+        $permissions = Collection::wrap($this->upgrade->permissions())->pluck('name');
 
         $this->existing = Permission::whereIn('name', $permissions)->pluck('name');
 
@@ -41,7 +41,7 @@ class Structure implements Upgrade, MigratesData, Prioritization, MigratesPostDa
     {
         $this->defaultRole = Role::whereName(Config::get('enso.config.defaultRole'))->first();
 
-        $this->upgrade->permissions()
+        Collection::wrap($this->upgrade->permissions())
             ->reject(fn ($permission) => $this->existing->contains($permission['name']))
             ->each(fn ($permission) => $this->storeWithRoles($permission));
 
@@ -99,8 +99,7 @@ class Structure implements Upgrade, MigratesData, Prioritization, MigratesPostDa
 
     private function upgradeRoles()
     {
-        $hasAdmin = $this->upgrade->roles()
-            ->some(fn ($role) => $role === $this->defaultRole->name);
+        $hasAdmin = in_array($this->defaultRole->name, $this->upgrade->roles());
 
         return $this->upgradeRoles ??= Role::query()
             ->whereIn('name', $this->upgrade->roles())
