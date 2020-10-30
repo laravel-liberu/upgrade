@@ -2,6 +2,6 @@
 
 namespace LaravelEnso\Upgrade\Contracts;
 
-interface PreMigration
+interface BeforeMigration
 {
 }
