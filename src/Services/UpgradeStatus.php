@@ -52,8 +52,8 @@ class UpgradeStatus extends Upgrade
     private function migration(Contract $upgrade): string
     {
         return $upgrade instanceof BeforeMigration
-            ? $this->green('Before')
-            : $this->yellow('After');
+            ? $this->yellow('Before')
+            : $this->green('After');
     }
 
     private function ran(Contract $upgrade): string
