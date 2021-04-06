@@ -45,7 +45,7 @@ class StructureUpgradeTest extends TestCase
     public function can_migrate_default_permission()
     {
         $this->upgrade->permissions = [
-            ['name' => 'test', 'description' => 'test','is_default' => true],
+            ['name' => 'test', 'description' => 'test', 'is_default' => true],
         ];
 
         $this->migrateStructure();

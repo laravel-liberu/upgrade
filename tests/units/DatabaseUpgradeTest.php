@@ -45,7 +45,7 @@ class DatabaseUpgradeTest extends TestCase
         )))->handle();
 
         $this->assertEquals([
-            PrioritizationHighest::class, PriorityDefault::class
+            PrioritizationHighest::class, PriorityDefault::class,
         ], static::$calls);
     }
 
@@ -89,7 +89,7 @@ class DatabaseUpgradeTest extends TestCase
     {
         return Mockery::mock(Finder::class)
             ->allows([
-                'upgrades' => (new Collection($classes))->map(fn ($class) => new $class)
+                'upgrades' => (new Collection($classes))->map(fn ($class) => new $class),
             ]);
     }
 }
@@ -155,7 +155,6 @@ class AlreadyMigratedMigrationTest extends TestDatabaseMigration
     }
 }
 
-
 class PrioritizationHighest implements Prioritization, MigratesTable
 {
     public function isMigrated(): bool
@@ -174,7 +173,6 @@ class PrioritizationHighest implements Prioritization, MigratesTable
     }
 }
 
-
 class PriorityDefault implements MigratesTable
 {
     public function isMigrated(): bool
@@ -187,7 +185,6 @@ class PriorityDefault implements MigratesTable
         DatabaseUpgradeTest::$calls[] = static::class;
     }
 }
-
 
 class NotApplicable implements MigratesTable, Applicable
 {
