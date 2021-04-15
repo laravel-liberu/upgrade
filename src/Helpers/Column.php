@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Schema;
 
 class Column
 {
+    public static function nullable(string $table, string $column): bool
+    {
+        return ! self::isNotNullable($table, $column);
+    }
+
     public static function isNotNullable(string $table, string $column): bool
     {
         return Schema::getConnection()
