@@ -4,6 +4,7 @@ namespace LaravelEnso\Upgrade\Helpers;
 
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class Table
@@ -26,5 +27,15 @@ class Table
         return Schema::getConnection()->getDoctrineSchemaManager()
             ->listTableDetails($table)
             ->getForeignKey($name);
+    }
+
+    public static function hasType(string $table, string $column, string $type): bool
+    {
+        $field = Collection::wrap(DB::select("SHOW FIELDS FROM {$table}"))
+            ->first(fn ($col) => $col->Field === $column);
+
+        return $field
+            ? $field->Type === $type
+            : false;
     }
 }
