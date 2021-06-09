@@ -77,13 +77,13 @@ class FinderTest extends TestCase
     protected function getUpgrade(string $class): Collection
     {
         return (new Finder())->upgrades()
-            ->filter(fn ($upgrade) => get_class($upgrade) === $class);
+            ->filter(fn ($upgrade) => $upgrade::class === $class);
     }
 
     private function package(...$folders): string
     {
         return base_path(
-            (new Collection(['vendor/laravel-enso/testUpgrades', ...$folders]))
+            Collection::wrap(['vendor/laravel-enso/testUpgrades', ...$folders])
                 ->implode(DIRECTORY_SEPARATOR)
         );
     }

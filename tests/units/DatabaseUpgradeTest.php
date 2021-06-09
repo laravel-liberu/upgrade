@@ -87,10 +87,9 @@ class DatabaseUpgradeTest extends TestCase
 
     private function finder(...$classes)
     {
-        return Mockery::mock(Finder::class)
-            ->allows([
-                'upgrades' => (new Collection($classes))->map(fn ($class) => new $class),
-            ]);
+        return Mockery::mock(Finder::class)->allows([
+            'upgrades' => Collection::wrap($classes)->map(fn ($class) => new $class),
+        ]);
     }
 }
 

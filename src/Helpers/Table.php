@@ -14,7 +14,7 @@ class Table
         $currentIndexes = Schema::getConnection()->getDoctrineSchemaManager()
             ->listTableIndexes($table);
 
-        return (new Collection($currentIndexes))->has($index);
+        return Collection::wrap($currentIndexes)->has($index);
     }
 
     public static function hasColumn(string $table, string $column): bool

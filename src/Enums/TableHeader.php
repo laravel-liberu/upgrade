@@ -14,7 +14,7 @@ class TableHeader extends Enum
     public const Priority = 6;
     public const Migration = 7;
     public const Ran = 8;
-    public const ChangedAt = 9;
+    public const LastModifiedAt = 9;
 
     protected static array $data = [
         self::NrCrt => 'Nr Crt',
@@ -25,6 +25,6 @@ class TableHeader extends Enum
         self::Priority => 'Priority',
         self::Migration => 'Migration',
         self::Ran => 'Ran',
-        self::ChangedAt => 'Changed At',
+        self::LastModifiedAt => 'Last Modified At',
     ];
 }

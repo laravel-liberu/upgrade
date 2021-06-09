@@ -28,7 +28,7 @@ class Package
 
     public function upgradeClasses()
     {
-        return (new Collection(File::allFiles($this->upgradeFolder())))
+        return Collection::wrap(File::allFiles($this->upgradeFolder()))
             ->map(fn (SplFileInfo $file) => $this->namespace(
                 'Upgrades',
                 $file->getRelativePath('Upgrades'),
@@ -43,9 +43,9 @@ class Package
 
     private function namespace(...$segments): string
     {
-        return (new Collection([
+        return Collection::wrap([
             rtrim($this->psr4Namespace(), '\\'), ...$segments,
-        ]))->filter()->implode('\\');
+        ])->filter()->implode('\\');
     }
 
     private function upgradeFolder()
@@ -55,7 +55,7 @@ class Package
 
     private function appFolder(...$segments): string
     {
-        return (new Collection([$this->folder, $this->psr4Folder(), ...$segments]))
+        return Collection::wrap([$this->folder, $this->psr4Folder(), ...$segments])
             ->implode(DIRECTORY_SEPARATOR);
     }
 

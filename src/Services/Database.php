@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use LaravelEnso\Upgrade\Contracts\MigratesData;
 use LaravelEnso\Upgrade\Contracts\MigratesPostDataMigration;
 use LaravelEnso\Upgrade\Contracts\MigratesTable;
@@ -19,10 +18,10 @@ class Database extends Command
 {
     protected $output;
 
+    private Upgrade $upgrade;
+    private ReflectionClass $reflection;
     private string $title;
     private string $time;
-    private ReflectionClass $reflection;
-    private Upgrade $upgrade;
 
     public function __construct(Upgrade $upgrade)
     {
@@ -34,23 +33,19 @@ class Database extends Command
         $this->title = $this->title();
     }
 
-    private function title(): string
-    {
-        $reflection = $this->upgrade instanceof Structure
-            ? $this->upgrade->reflection()
-            : $this->reflection;
-
-        $snake = Str::snake($reflection->getShortName());
-
-        return Str::ucfirst(str_replace('_', ' ', $snake));
-    }
-
     public function handle()
     {
         if ($this->upgrade->isMigrated()) {
-            $this->info("{$this->title} has been already done");
+            $this->line("{$this->title} -> has been already done");
         } else {
             $this->start()->migrate()->end();
+        }
+    }
+
+    public function line($string, $style = null, $verbosity = null)
+    {
+        if (! App::runningUnitTests()) {
+            parent::line(...func_get_args());
         }
     }
 
@@ -58,7 +53,7 @@ class Database extends Command
     {
         $this->time = microtime(true);
 
-        $this->info("{$this->title} is starting");
+        $this->warn("{$this->title} -> is starting");
 
         return $this;
     }
@@ -82,7 +77,7 @@ class Database extends Command
                 $this->upgrade->rollbackTableMigration();
             }
 
-            $this->error("{$this->title} failed, doing rollback");
+            $this->error("{$this->title} -> failed, doing rollback ({$this->duration()} ms)");
 
             throw $exception;
         }
@@ -92,8 +87,7 @@ class Database extends Command
 
     private function end()
     {
-        $time = (int) ((microtime(true) - $this->time) * 1000);
-        $this->info("{$this->title} was done ({$time} ms)");
+        $this->info("{$this->title} -> was successfully done ({$this->duration()} ms)");
     }
 
     private function migratesTable(): bool
@@ -116,10 +110,16 @@ class Database extends Command
         return $this->reflection->implementsInterface(RollbackTableMigration::class);
     }
 
-    public function line($string, $style = null, $verbosity = null)
+    private function duration(): int
     {
-        if (! App::runningUnitTests()) {
-            parent::line(...func_get_args());
-        }
+        return (int) ((microtime(true) - $this->time) * 1000);
+    }
+
+    private function title(): string
+    {
+        $package = Reflection::package($this->upgrade);
+        $service = Reflection::upgrade($this->upgrade);
+
+        return "{$package}/{$service}";
     }
 }
