@@ -2,22 +2,29 @@
 
 namespace LaravelEnso\Upgrade\Helpers;
 
+use Doctrine\DBAL\Schema\Column as DoctrineColumn;
 use Illuminate\Support\Facades\Schema;
 
 class Column
 {
-    public static function nullable(string $table, string $column): bool
+    public static function isNullable(string $table, string $column): bool
     {
         return ! self::isNotNullable($table, $column);
     }
 
+    public static function isSigned(string $table, string $column): bool
+    {
+        return ! self::isUnsigned($table, $column);
+    }
+
+    public static function isUnsigned(string $table, string $column): bool
+    {
+        return self::doctrineColumn($table, $column)->getUnsigned();
+    }
+
     public static function isNotNullable(string $table, string $column): bool
     {
-        return Schema::getConnection()
-            ->getDoctrineSchemaManager()
-            ->listTableDetails($table)
-            ->getColumn($column)
-            ->getNotnull();
+        return self::doctrineColumn($table, $column)->getNotnull();
     }
 
     public static function isDecimal(string $table, string $column): bool
@@ -65,8 +72,26 @@ class Column
         return self::isType($table, $column, 'string');
     }
 
+    public static function getPrecision(string $table, string $column): int
+    {
+        return self::doctrineColumn($table, $column)->getPrecision();
+    }
+
+    public static function getScale(string $table, string $column): int
+    {
+        return self::doctrineColumn($table, $column)->getScale();
+    }
+
     private static function isType(string $table, string $column, string $type): bool
     {
         return Schema::getColumnType($table, $column) === $type;
+    }
+
+    private static function doctrineColumn(string $table, string $column): DoctrineColumn
+    {
+        return Schema::getConnection()
+            ->getDoctrineSchemaManager()
+            ->listTableDetails($table)
+            ->getColumn($column);
     }
 }
