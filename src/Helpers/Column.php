@@ -82,6 +82,11 @@ class Column
         return self::doctrineColumn($table, $column)->getScale();
     }
 
+    public static function getLength(string $table, string $column): int
+    {
+        return self::doctrineColumn($table, $column)->getLength();
+    }
+
     private static function isType(string $table, string $column, string $type): bool
     {
         return Schema::getColumnType($table, $column) === $type;
