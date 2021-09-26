@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Schema;
 
 class Table
 {
+    public static function exists(string $table): bool
+    {
+        return Schema::hasTable($table);
+    }
+
     public static function hasIndex(string $table, string $index): bool
     {
         $currentIndexes = Schema::getConnection()->getDoctrineSchemaManager()
