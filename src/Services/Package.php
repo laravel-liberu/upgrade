@@ -80,6 +80,10 @@ class Package
 
     private function isUpgrade($class): bool
     {
+        if (! class_exists($class)) {
+            return false;
+        }
+
         $reflection = new ReflectionClass($class);
 
         return $reflection->implementsInterface(MigratesStructure::class)
