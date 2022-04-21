@@ -27,9 +27,18 @@ class Table
         return Schema::hasColumn($table, $column);
     }
 
+    public static function hasForeignKey(string $table, string $name): bool
+    {
+        return Schema::getConnection()
+            ->getDoctrineSchemaManager()
+            ->listTableDetails($table)
+            ->hasForeignKey($name);
+    }
+
     public static function foreignKey(string $table, string $name): ?ForeignKeyConstraint
     {
-        return Schema::getConnection()->getDoctrineSchemaManager()
+        return Schema::getConnection()
+            ->getDoctrineSchemaManager()
             ->listTableDetails($table)
             ->getForeignKey($name);
     }
