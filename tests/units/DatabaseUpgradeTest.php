@@ -41,7 +41,8 @@ class DatabaseUpgradeTest extends TestCase
     public function can_upgrade_with_priorities()
     {
         (new Service($this->finder(
-            PriorityDefault::class, PrioritizationHighest::class,
+            PriorityDefault::class,
+            PrioritizationHighest::class,
         )))->handle();
 
         $this->assertEquals([
@@ -87,9 +88,11 @@ class DatabaseUpgradeTest extends TestCase
 
     private function finder(...$classes)
     {
-        return Mockery::mock(Finder::class)->allows([
-            'upgrades' => Collection::wrap($classes)->map(fn ($class) => new $class),
-        ]);
+        $upgrades = Collection::wrap($classes)
+            ->map(fn ($class) => new $class());
+
+        return Mockery::mock(Finder::class)
+            ->allows(['upgrades' => $upgrades]);
     }
 }
 
