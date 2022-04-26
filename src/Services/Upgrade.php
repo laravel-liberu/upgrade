@@ -3,6 +3,7 @@
 namespace LaravelEnso\Upgrade\Services;
 
 use Illuminate\Support\Collection;
+use LaravelEnso\Roles\Models\Role;
 use LaravelEnso\Upgrade\Contracts\Applicable;
 use LaravelEnso\Upgrade\Contracts\BeforeMigration;
 use LaravelEnso\Upgrade\Contracts\Prioritization;
@@ -40,7 +41,10 @@ class Upgrade
     {
         $this->sorted()
             ->filter(fn ($upgrade) => $this->canRun($upgrade))
-            ->each(fn ($upgrade) => (new Database($upgrade))->handle());
+            ->map(fn ($upgrade) => new Database($upgrade))
+            ->each->handle();
+
+        Role::all()->each->clearPermissionCache();
     }
 
     protected function sorted(): Collection

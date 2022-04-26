@@ -2,7 +2,6 @@
 
 namespace LaravelEnso\Upgrade\Services;
 
-use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +12,7 @@ use LaravelEnso\Upgrade\Contracts\RollbackTableMigration;
 use LaravelEnso\Upgrade\Contracts\Upgrade;
 use ReflectionClass;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Throwable;
 
 class Database extends Command
 {
@@ -72,14 +72,14 @@ class Database extends Command
             if ($this->migratesPostDataMigration()) {
                 $this->upgrade->migratePostDataMigration();
             }
-        } catch (Exception $exception) {
+        } catch (Throwable $throwable) {
             if ($this->rollbacksTableMigration()) {
                 $this->upgrade->rollbackTableMigration();
             }
 
             $this->error("{$this->title} -> failed, doing rollback ({$this->duration()} ms)");
 
-            throw $exception;
+            throw $throwable;
         }
 
         return $this;
