@@ -4,6 +4,7 @@ namespace LaravelEnso\Upgrade\Services;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use LaravelEnso\Helpers\Services\JsonReader;
 use LaravelEnso\Upgrade\Contracts\MigratesStructure;
 use LaravelEnso\Upgrade\Contracts\Upgrade;
@@ -22,7 +23,7 @@ class Package
 
     public function qualifies(): bool
     {
-        return File::exists($this->folder.DIRECTORY_SEPARATOR.'composer.json')
+        return File::exists("{$this->folder}/composer.json")
             && $this->hasUpgrades();
     }
 
@@ -48,15 +49,17 @@ class Package
         ])->filter()->implode('\\');
     }
 
-    private function upgradeFolder()
+    private function upgradeFolder(): string
     {
         return $this->appFolder('Upgrades');
     }
 
     private function appFolder(...$segments): string
     {
-        return Collection::wrap([$this->folder, $this->psr4Folder(), ...$segments])
-            ->implode(DIRECTORY_SEPARATOR);
+        $path = Collection::wrap([$this->folder, $this->psr4Folder(), ...$segments])
+            ->implode('/');
+
+        return Str::of($path)->replace('//', '/');
     }
 
     private function psr4Folder()
@@ -71,11 +74,8 @@ class Package
 
     private function composer(): array
     {
-        return isset($this->composer)
-            ? $this->composer
-            : $this->composer = (new JsonReader(
-                $this->folder.DIRECTORY_SEPARATOR.'composer.json'
-            ))->array();
+        return $this->composer ??=
+            (new JsonReader("{$this->folder}/composer.json"))->array();
     }
 
     private function isUpgrade($class): bool

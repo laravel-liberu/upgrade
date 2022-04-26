@@ -19,7 +19,7 @@ class Finder
     private function upgradePackages(): Collection
     {
         return Collection::wrap(Config::get('enso.upgrade.vendors'))
-            ->map(fn ($vendor) => base_path('vendor'.DIRECTORY_SEPARATOR.$vendor))
+            ->map(fn ($vendor) => base_path("vendor/{$vendor}"))
             ->map(fn ($vendor) => File::directories($vendor))
             ->flatten()
             ->concat(Collection::wrap(Config::get('enso.upgrade.folders'))

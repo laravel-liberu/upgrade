@@ -82,9 +82,10 @@ class FinderTest extends TestCase
 
     private function package(...$folders): string
     {
-        return base_path(
-            Collection::wrap(['vendor/laravel-enso/testUpgrades', ...$folders])
-                ->implode(DIRECTORY_SEPARATOR)
-        );
+        $relative = Collection::wrap($folders)
+            ->prepend('vendor/laravel-enso/testUpgrades')
+            ->implode('/');
+
+        return base_path($relative);
     }
 }
