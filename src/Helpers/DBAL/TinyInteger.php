@@ -33,6 +33,6 @@ class TinyInteger extends Type implements PhpIntegerMappingType
 
     private function getUnsignedDeclaration(array $column): string
     {
-        return !empty($column['unsigned']) ? ' UNSIGNED' : '';
+        return empty($column['unsigned']) ? '' : ' UNSIGNED';
     }
 }
