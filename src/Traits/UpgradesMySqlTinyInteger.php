@@ -3,7 +3,7 @@
 namespace LaravelEnso\Upgrade\Traits;
 
 use Doctrine\DBAL\Types\Type;
-use LaravelEnso\Upgrade\Helpers\Doctrine\TinyInteger;
+use LaravelEnso\Upgrade\Helpers\DBAL\TinyInteger;
 
 trait UpgradesMySqlTinyInteger
 {
