@@ -42,6 +42,11 @@ class Column
         return self::isType($table, $column, 'bigint');
     }
 
+    public static function isSmallInteger(string $table, string $column): bool
+    {
+        return self::isType($table, $column, 'smallint');
+    }
+
     public static function isTinyInteger(string $table, string $column): bool
     {
         return self::isBoolean($table, $column);
