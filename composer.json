@@ -1,27 +1,27 @@
 {
-    "name": "laravel-enso/upgrade",
+    "name": "cgdsoftware/upgrade",
     "description": "Helper classes dependency for Laravel Enso",
     "keywords": [
-        "laravel-enso",
+        "cgdsoftware",
         "upgrade"
     ],
-    "homepage": "https://github.com/laravel-enso/upgrade",
+    "homepage": "https://github.com/cgdsoftware/upgrade",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Adrian Ocneanu",
             "email": "aocneanu@gmail.com",
-            "homepage": "https://laravel-enso.com",
+            "homepage": "https://cgdsoftware.com",
             "role": "Developer"
         }
     ],
     "require": {
         "laravel/framework": "^9.0",
-        "laravel-enso/core": "^8.0",
-        "laravel-enso/helpers": "^2.0",
-        "laravel-enso/permissions": "^5.0",
-        "laravel-enso/roles": "^5.0"
+        "cgdsoftware/core": "^8.0",
+        "cgdsoftware/helpers": "^2.0",
+        "cgdsoftware/permissions": "^5.0",
+        "cgdsoftware/roles": "^5.0"
     },
     "autoload": {
         "psr-4": {
