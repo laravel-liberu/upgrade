@@ -4,6 +4,7 @@ namespace LaravelEnso\Upgrade\Services;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use LaravelEnso\Permissions\Models\Permission;
 use LaravelEnso\Roles\Models\Role;
@@ -39,6 +40,10 @@ class Structure implements Upgrade, MigratesData, Prioritization, MigratesPostDa
 
     public function migrateData(): void
     {
+        if (App::isLocal()) {
+            Artisan::call('enso:roles:sync');
+        }
+
         Collection::wrap($this->upgrade->permissions())
             ->reject(fn ($permission) => $this->existing->contains($permission['name']))
             ->each(fn ($permission) => $this->storeWithRoles($permission));
