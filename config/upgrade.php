@@ -2,5 +2,5 @@
 
 return [
     'folders' => ['.'],
-    'vendors' => ['laravel-enso'],
+    'vendors' => ['laravel-liberu'],
 ];
