@@ -17,14 +17,12 @@ use ReflectionClass;
 
 class Structure implements Upgrade, MigratesData, Prioritization, MigratesPostDataMigration, Applicable
 {
-    private MigratesStructure $upgrade;
     private Collection $existing;
     private Collection $roles;
-    private string $defaultRole;
+    private readonly string $defaultRole;
 
-    public function __construct(MigratesStructure $upgrade)
+    public function __construct(private readonly MigratesStructure $upgrade)
     {
-        $this->upgrade = $upgrade;
         $this->defaultRole = Config::get('enso.config.defaultRole');
     }
 

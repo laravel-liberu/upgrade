@@ -17,17 +17,13 @@ use Throwable;
 class Database extends Command
 {
     protected $output;
-
-    private Upgrade $upgrade;
-    private ReflectionClass $reflection;
-    private string $title;
+    private readonly ReflectionClass $reflection;
+    private readonly string $title;
     private string $time;
 
-    public function __construct(Upgrade $upgrade)
+    public function __construct(private readonly Upgrade $upgrade)
     {
         parent::__construct();
-
-        $this->upgrade = $upgrade;
         $this->reflection = (new ReflectionClass($upgrade));
         $this->output = new ConsoleOutput();
         $this->title = $this->title();

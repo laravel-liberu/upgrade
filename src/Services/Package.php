@@ -13,12 +13,10 @@ use Symfony\Component\Finder\SplFileInfo;
 
 class Package
 {
-    private string $folder;
     private array $composer;
 
-    public function __construct(string $folder)
+    public function __construct(private readonly string $folder)
     {
-        $this->folder = $folder;
     }
 
     public function qualifies(): bool
@@ -32,7 +30,7 @@ class Package
         return Collection::wrap(File::allFiles($this->upgradeFolder()))
             ->map(fn (SplFileInfo $file) => $this->namespace(
                 'Upgrades',
-                $file->getRelativePath('Upgrades'),
+                $file->getRelativePath(),
                 $file->getFilenameWithoutExtension()
             ))->filter(fn ($class) => $this->isUpgrade($class));
     }
@@ -45,7 +43,7 @@ class Package
     private function namespace(...$segments): string
     {
         return Collection::wrap([
-            rtrim($this->psr4Namespace(), '\\'), ...$segments,
+            rtrim((string) $this->psr4Namespace(), '\\'), ...$segments,
         ])->filter()->implode('\\');
     }
 

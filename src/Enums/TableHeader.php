@@ -6,15 +6,15 @@ use LaravelEnso\Enums\Services\Enum;
 
 class TableHeader extends Enum
 {
-    public const NrCrt = 1;
-    public const Package = 2;
-    public const Upgrade = 3;
-    public const Applicable = 4;
-    public const Manual = 5;
-    public const Priority = 6;
-    public const Migration = 7;
-    public const Ran = 8;
-    public const LastModifiedAt = 9;
+    final public const NrCrt = 1;
+    final public const Package = 2;
+    final public const Upgrade = 3;
+    final public const Applicable = 4;
+    final public const Manual = 5;
+    final public const Priority = 6;
+    final public const Migration = 7;
+    final public const Ran = 8;
+    final public const LastModifiedAt = 9;
 
     protected static array $data = [
         self::NrCrt => 'Nr Crt',

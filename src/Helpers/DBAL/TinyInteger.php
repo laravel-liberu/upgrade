@@ -9,7 +9,7 @@ use Doctrine\DBAL\Types\Type;
 
 class TinyInteger extends Type implements PhpIntegerMappingType
 {
-    const NAME = 'tinyinteger';
+    final public const NAME = 'tinyinteger';
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
