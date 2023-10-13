@@ -24,7 +24,7 @@ class StructureUpgradeTest extends TestCase
 
         $this->upgrade = new TestStructureMigration();
 
-        $this->defaultRole = $this->role(Config::get('enso.config.defaultRole'));
+        $this->defaultRole = $this->role(Config::get('liberu.config.defaultRole'));
 
         $this->secondaryRole = $this->role('secondaryRole');
     }

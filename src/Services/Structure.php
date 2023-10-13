@@ -23,7 +23,7 @@ class Structure implements Upgrade, MigratesData, Prioritization, MigratesPostDa
 
     public function __construct(private readonly MigratesStructure $upgrade)
     {
-        $this->defaultRole = Config::get('enso.config.defaultRole');
+        $this->defaultRole = Config::get('liberu.config.defaultRole');
     }
 
     public function isMigrated(): bool

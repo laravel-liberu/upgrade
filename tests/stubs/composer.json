@@ -1,5 +1,5 @@
 {
-    "name": "laravel-enso/testUpgrade",
+    "name": "laravel-liberu/testUpgrade",
     "autoload": {
         "psr-4": {
             "LaravelLiberu\\TestUpgrade\\": "src/"

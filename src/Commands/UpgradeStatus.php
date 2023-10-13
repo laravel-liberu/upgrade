@@ -8,7 +8,7 @@ use LaravelLiberu\Upgrade\Services\UpgradeStatus as Service;
 
 class UpgradeStatus extends Command
 {
-    protected $signature = 'enso:upgrade:status';
+    protected $signature = 'liberu:upgrade:status';
 
     protected $description = "This command will display the existing upgrade's status";
 

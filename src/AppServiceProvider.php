@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
 
     private function load(): self
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/upgrade.php', 'enso.upgrade');
+        $this->mergeConfigFrom(__DIR__.'/../config/upgrade.php', 'liberu.upgrade');
 
         return $this;
     }
@@ -25,8 +25,8 @@ class AppServiceProvider extends ServiceProvider
     private function publish(): self
     {
         $this->publishes([
-            __DIR__.'/../config' => config_path('enso'),
-        ], ['upgrade-config', 'enso-config']);
+            __DIR__.'/../config' => config_path('liberu'),
+        ], ['upgrade-config', 'liberu-config']);
 
         return $this;
     }

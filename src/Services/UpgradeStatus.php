@@ -43,7 +43,7 @@ class UpgradeStatus extends Upgrade
     private function changedAt(Contract $upgrade): string
     {
         $lastModifiedAt = Reflection::lastModifiedAt($upgrade);
-        $format = Config::get('enso.config.dateTimeFormat');
+        $format = Config::get('liberu.config.dateTimeFormat');
 
         return "{$lastModifiedAt->format($format)} ({$lastModifiedAt->diffForHumans()})";
     }

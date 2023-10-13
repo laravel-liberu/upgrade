@@ -18,11 +18,11 @@ class Finder
 
     private function upgradePackages(): Collection
     {
-        return Collection::wrap(Config::get('enso.upgrade.vendors'))
+        return Collection::wrap(Config::get('liberu.upgrade.vendors'))
             ->map(fn ($vendor) => base_path("vendor/{$vendor}"))
             ->map(fn ($vendor) => File::directories($vendor))
             ->flatten()
-            ->concat(Collection::wrap(Config::get('enso.upgrade.folders'))
+            ->concat(Collection::wrap(Config::get('liberu.upgrade.folders'))
                 ->map(fn ($folder) => base_path($folder)))
             ->map(fn ($path) => new Package($path))
             ->filter->qualifies();

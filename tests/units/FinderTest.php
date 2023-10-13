@@ -27,8 +27,8 @@ class FinderTest extends TestCase
 
         File::copyDirectory(__DIR__.'/../stubs', $this->package());
         $this->register();
-        Config::set('enso.upgrade.folders', ['vendor/laravel-enso/testUpgrades']);
-        Config::set('enso.upgrade.vendors', []);
+        Config::set('liberu.upgrade.folders', ['vendor/laravel-liberu/testUpgrades']);
+        Config::set('liberu.upgrade.vendors', []);
     }
 
     public function tearDown(): void
@@ -83,7 +83,7 @@ class FinderTest extends TestCase
     private function package(...$folders): string
     {
         $relative = Collection::wrap($folders)
-            ->prepend('vendor/laravel-enso/testUpgrades')
+            ->prepend('vendor/laravel-liberu/testUpgrades')
             ->implode('/');
 
         return base_path($relative);
