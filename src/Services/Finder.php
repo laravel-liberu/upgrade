@@ -1,11 +1,11 @@
 <?php
 
-namespace LaravelEnso\Upgrade\Services;
+namespace LaravelLiberu\Upgrade\Services;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
-use LaravelEnso\Upgrade\Contracts\MigratesStructure;
+use LaravelLiberu\Upgrade\Contracts\MigratesStructure;
 
 class Finder
 {

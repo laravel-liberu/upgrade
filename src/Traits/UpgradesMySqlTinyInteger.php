@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelEnso\Upgrade\Traits;
+namespace LaravelLiberu\Upgrade\Traits;
 
 use Doctrine\DBAL\Types\Type;
-use LaravelEnso\Upgrade\Helpers\DBAL\TinyInteger;
+use LaravelLiberu\Upgrade\Helpers\DBAL\TinyInteger;
 
 trait UpgradesMySqlTinyInteger
 {

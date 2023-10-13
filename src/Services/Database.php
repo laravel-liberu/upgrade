@@ -1,15 +1,15 @@
 <?php
 
-namespace LaravelEnso\Upgrade\Services;
+namespace LaravelLiberu\Upgrade\Services;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-use LaravelEnso\Upgrade\Contracts\MigratesData;
-use LaravelEnso\Upgrade\Contracts\MigratesPostDataMigration;
-use LaravelEnso\Upgrade\Contracts\MigratesTable;
-use LaravelEnso\Upgrade\Contracts\RollbackTableMigration;
-use LaravelEnso\Upgrade\Contracts\Upgrade;
+use LaravelLiberu\Upgrade\Contracts\MigratesData;
+use LaravelLiberu\Upgrade\Contracts\MigratesPostDataMigration;
+use LaravelLiberu\Upgrade\Contracts\MigratesTable;
+use LaravelLiberu\Upgrade\Contracts\RollbackTableMigration;
+use LaravelLiberu\Upgrade\Contracts\Upgrade;
 use ReflectionClass;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Throwable;

@@ -2,12 +2,12 @@
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use LaravelEnso\Permissions\Models\Permission;
-use LaravelEnso\Roles\Models\Role;
-use LaravelEnso\Upgrade\Contracts\MigratesStructure;
-use LaravelEnso\Upgrade\Services\Database;
-use LaravelEnso\Upgrade\Services\Structure;
-use LaravelEnso\Upgrade\Traits\StructureMigration;
+use LaravelLiberu\Permissions\Models\Permission;
+use LaravelLiberu\Roles\Models\Role;
+use LaravelLiberu\Upgrade\Contracts\MigratesStructure;
+use LaravelLiberu\Upgrade\Services\Database;
+use LaravelLiberu\Upgrade\Services\Structure;
+use LaravelLiberu\Upgrade\Traits\StructureMigration;
 use Tests\TestCase;
 
 class StructureUpgradeTest extends TestCase

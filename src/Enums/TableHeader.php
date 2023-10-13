@@ -1,8 +1,8 @@
 <?php
 
-namespace LaravelEnso\Upgrade\Enums;
+namespace LaravelLiberu\Upgrade\Enums;
 
-use LaravelEnso\Enums\Services\Enum;
+use LaravelLiberu\Enums\Services\Enum;
 
 class TableHeader extends Enum
 {

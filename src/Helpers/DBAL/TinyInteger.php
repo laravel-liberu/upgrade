@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelEnso\Upgrade\Helpers\DBAL;
+namespace LaravelLiberu\Upgrade\Helpers\DBAL;
 
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;

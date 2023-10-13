@@ -1,8 +1,8 @@
 <?php
 
-namespace LaravelEnso\TestUpgrade\Upgrades\Deep;
+namespace LaravelLiberu\TestUpgrade\Upgrades\Deep;
 
-use LaravelEnso\Upgrade\Contracts\Upgrade;
+use LaravelLiberu\Upgrade\Contracts\Upgrade;
 
 class DeepUpgrade implements Upgrade
 {

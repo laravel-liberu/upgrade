@@ -1,13 +1,13 @@
 <?php
 
-namespace LaravelEnso\Upgrade\Services;
+namespace LaravelLiberu\Upgrade\Services;
 
 use Illuminate\Support\Facades\Config;
-use LaravelEnso\Upgrade\Contracts\Applicable;
-use LaravelEnso\Upgrade\Contracts\BeforeMigration;
-use LaravelEnso\Upgrade\Contracts\ShouldRunManually;
-use LaravelEnso\Upgrade\Contracts\Upgrade as Contract;
-use LaravelEnso\Upgrade\Enums\TableHeader;
+use LaravelLiberu\Upgrade\Contracts\Applicable;
+use LaravelLiberu\Upgrade\Contracts\BeforeMigration;
+use LaravelLiberu\Upgrade\Contracts\ShouldRunManually;
+use LaravelLiberu\Upgrade\Contracts\Upgrade as Contract;
+use LaravelLiberu\Upgrade\Enums\TableHeader;
 
 class UpgradeStatus extends Upgrade
 {

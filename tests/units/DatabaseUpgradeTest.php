@@ -4,15 +4,15 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use LaravelEnso\Upgrade\Contracts\Applicable;
-use LaravelEnso\Upgrade\Contracts\MigratesData;
-use LaravelEnso\Upgrade\Contracts\MigratesPostDataMigration;
-use LaravelEnso\Upgrade\Contracts\MigratesTable;
-use LaravelEnso\Upgrade\Contracts\Prioritization;
-use LaravelEnso\Upgrade\Contracts\RollbackTableMigration;
-use LaravelEnso\Upgrade\Helpers\Table;
-use LaravelEnso\Upgrade\Services\Finder;
-use LaravelEnso\Upgrade\Services\Upgrade as Service;
+use LaravelLiberu\Upgrade\Contracts\Applicable;
+use LaravelLiberu\Upgrade\Contracts\MigratesData;
+use LaravelLiberu\Upgrade\Contracts\MigratesPostDataMigration;
+use LaravelLiberu\Upgrade\Contracts\MigratesTable;
+use LaravelLiberu\Upgrade\Contracts\Prioritization;
+use LaravelLiberu\Upgrade\Contracts\RollbackTableMigration;
+use LaravelLiberu\Upgrade\Helpers\Table;
+use LaravelLiberu\Upgrade\Services\Finder;
+use LaravelLiberu\Upgrade\Services\Upgrade as Service;
 use Tests\TestCase;
 
 class DatabaseUpgradeTest extends TestCase

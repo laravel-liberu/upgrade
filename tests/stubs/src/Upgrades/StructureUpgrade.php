@@ -1,8 +1,8 @@
 <?php
 
-namespace LaravelEnso\TestUpgrade\Upgrades;
+namespace LaravelLiberu\TestUpgrade\Upgrades;
 
-use LaravelEnso\Upgrade\Contracts\MigratesStructure;
+use LaravelLiberu\Upgrade\Contracts\MigratesStructure;
 
 class StructureUpgrade implements MigratesStructure
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelEnso\Upgrade\Helpers;
+namespace LaravelLiberu\Upgrade\Helpers;
 
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Illuminate\Support\Collection;

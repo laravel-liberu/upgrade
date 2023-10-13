@@ -1,18 +1,18 @@
 <?php
 
-namespace LaravelEnso\Upgrade\Services;
+namespace LaravelLiberu\Upgrade\Services;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
-use LaravelEnso\Permissions\Models\Permission;
-use LaravelEnso\Roles\Models\Role;
-use LaravelEnso\Upgrade\Contracts\Applicable;
-use LaravelEnso\Upgrade\Contracts\MigratesData;
-use LaravelEnso\Upgrade\Contracts\MigratesPostDataMigration;
-use LaravelEnso\Upgrade\Contracts\MigratesStructure;
-use LaravelEnso\Upgrade\Contracts\Prioritization;
-use LaravelEnso\Upgrade\Contracts\Upgrade;
+use LaravelLiberu\Permissions\Models\Permission;
+use LaravelLiberu\Roles\Models\Role;
+use LaravelLiberu\Upgrade\Contracts\Applicable;
+use LaravelLiberu\Upgrade\Contracts\MigratesData;
+use LaravelLiberu\Upgrade\Contracts\MigratesPostDataMigration;
+use LaravelLiberu\Upgrade\Contracts\MigratesStructure;
+use LaravelLiberu\Upgrade\Contracts\Prioritization;
+use LaravelLiberu\Upgrade\Contracts\Upgrade;
 use ReflectionClass;
 
 class Structure implements Upgrade, MigratesData, Prioritization, MigratesPostDataMigration, Applicable

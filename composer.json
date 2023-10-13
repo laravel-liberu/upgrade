@@ -25,13 +25,13 @@
     },
     "autoload": {
         "psr-4": {
-            "LaravelEnso\\Upgrade\\": "src/"
+            "LaravelLiberu\\Upgrade\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "LaravelEnso\\Upgrade\\AppServiceProvider"
+                "LaravelLiberu\\Upgrade\\AppServiceProvider"
             ],
             "aliases": {}
         }

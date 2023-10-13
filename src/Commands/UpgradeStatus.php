@@ -1,10 +1,10 @@
 <?php
 
-namespace LaravelEnso\Upgrade\Commands;
+namespace LaravelLiberu\Upgrade\Commands;
 
 use Illuminate\Console\Command;
-use LaravelEnso\Upgrade\Enums\TableHeader;
-use LaravelEnso\Upgrade\Services\UpgradeStatus as Service;
+use LaravelLiberu\Upgrade\Enums\TableHeader;
+use LaravelLiberu\Upgrade\Services\UpgradeStatus as Service;
 
 class UpgradeStatus extends Command
 {

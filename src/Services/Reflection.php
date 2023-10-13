@@ -1,11 +1,11 @@
 <?php
 
-namespace LaravelEnso\Upgrade\Services;
+namespace LaravelLiberu\Upgrade\Services;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use LaravelEnso\Upgrade\Contracts\Upgrade;
+use LaravelLiberu\Upgrade\Contracts\Upgrade;
 use ReflectionClass;
 
 class Reflection

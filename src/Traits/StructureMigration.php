@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelEnso\Upgrade\Traits;
+namespace LaravelLiberu\Upgrade\Traits;
 
 trait StructureMigration
 {

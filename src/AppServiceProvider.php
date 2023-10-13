@@ -1,10 +1,10 @@
 <?php
 
-namespace LaravelEnso\Upgrade;
+namespace LaravelLiberu\Upgrade;
 
 use Illuminate\Support\ServiceProvider;
-use LaravelEnso\Upgrade\Commands\Upgrade;
-use LaravelEnso\Upgrade\Commands\UpgradeStatus;
+use LaravelLiberu\Upgrade\Commands\Upgrade;
+use LaravelLiberu\Upgrade\Commands\UpgradeStatus;
 
 class AppServiceProvider extends ServiceProvider
 {

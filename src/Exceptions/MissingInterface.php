@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelEnso\Upgrade\Exceptions;
+namespace LaravelLiberu\Upgrade\Exceptions;
 
 use Exception;
 

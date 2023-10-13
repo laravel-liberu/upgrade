@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelEnso\Upgrade\Commands;
+namespace LaravelLiberu\Upgrade\Commands;
 
 use Illuminate\Console\Command;
-use LaravelEnso\Upgrade\Services\Upgrade as Service;
+use LaravelLiberu\Upgrade\Services\Upgrade as Service;
 
 class Upgrade extends Command
 {

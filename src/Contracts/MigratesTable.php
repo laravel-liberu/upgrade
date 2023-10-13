@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelEnso\Upgrade\Contracts;
+namespace LaravelLiberu\Upgrade\Contracts;
 
 interface MigratesTable extends Upgrade
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelEnso\TestUpgrade\Upgrades;
+namespace LaravelLiberu\TestUpgrade\Upgrades;
 
 class POPO
 {

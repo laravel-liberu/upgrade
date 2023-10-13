@@ -4,13 +4,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
-use LaravelEnso\TestUpgrade\Upgrades\Deep\DeepUpgrade;
-use LaravelEnso\TestUpgrade\Upgrades\POPO;
-use LaravelEnso\TestUpgrade\Upgrades\SimpleUpgrade;
-use LaravelEnso\TestUpgrade\Upgrades\StructureUpgrade;
-use LaravelEnso\Upgrade\Contracts\MigratesStructure;
-use LaravelEnso\Upgrade\Services\Finder;
-use LaravelEnso\Upgrade\Services\Structure;
+use LaravelLiberu\TestUpgrade\Upgrades\Deep\DeepUpgrade;
+use LaravelLiberu\TestUpgrade\Upgrades\POPO;
+use LaravelLiberu\TestUpgrade\Upgrades\SimpleUpgrade;
+use LaravelLiberu\TestUpgrade\Upgrades\StructureUpgrade;
+use LaravelLiberu\Upgrade\Contracts\MigratesStructure;
+use LaravelLiberu\Upgrade\Services\Finder;
+use LaravelLiberu\Upgrade\Services\Structure;
 use Tests\TestCase;
 
 class FinderTest extends TestCase
@@ -69,7 +69,7 @@ class FinderTest extends TestCase
     {
         $loader = require base_path().'/vendor/autoload.php';
         $loader->setPsr4(
-            'LaravelEnso\TestUpgrade\\',
+            'LaravelLiberu\TestUpgrade\\',
             $this->package('src')
         );
     }

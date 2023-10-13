@@ -1,13 +1,13 @@
 <?php
 
-namespace LaravelEnso\Upgrade\Services;
+namespace LaravelLiberu\Upgrade\Services;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use LaravelEnso\Helpers\Services\JsonReader;
-use LaravelEnso\Upgrade\Contracts\MigratesStructure;
-use LaravelEnso\Upgrade\Contracts\Upgrade;
+use LaravelLiberu\Helpers\Services\JsonReader;
+use LaravelLiberu\Upgrade\Contracts\MigratesStructure;
+use LaravelLiberu\Upgrade\Contracts\Upgrade;
 use ReflectionClass;
 use Symfony\Component\Finder\SplFileInfo;
 

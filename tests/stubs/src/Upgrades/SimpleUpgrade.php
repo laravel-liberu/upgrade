@@ -1,8 +1,8 @@
 <?php
 
-namespace LaravelEnso\TestUpgrade\Upgrades;
+namespace LaravelLiberu\TestUpgrade\Upgrades;
 
-use LaravelEnso\Upgrade\Contracts\Upgrade;
+use LaravelLiberu\Upgrade\Contracts\Upgrade;
 
 class SimpleUpgrade implements Upgrade
 {
