@@ -9,7 +9,7 @@ class Upgrade extends Command
 {
     protected $signature = 'liberu:upgrade {--manual} {--before-migration}';
 
-    protected $description = 'This command will upgrade your Enso project to the latest version';
+    protected $description = 'This command will upgrade your Liberu project to the latest version';
 
     public function handle()
     {

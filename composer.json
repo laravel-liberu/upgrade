@@ -1,6 +1,6 @@
 {
     "name": "laravel-liberu/upgrade",
-    "description": "Helper classes dependency for Laravel Enso",
+    "description": "Helper classes dependency for Laravel Liberu",
     "keywords": [
         "laravel-liberu",
         "upgrade"
